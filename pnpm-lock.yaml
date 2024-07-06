@@ -14,6 +14,9 @@ importers:
       '@gluestack-style/react':
         specifier: ^1.0.56
         version: 1.0.56
+      '@gluestack-ui/config':
+        specifier: ^1.1.18
+        version: 1.1.18(@gluestack-style/react@1.0.56)(@gluestack-ui/themed@1.1.32(@gluestack-style/react@1.0.56)(@types/react-native@0.73.0(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(nativewind@2.0.11(react@18.2.0)(tailwindcss@3.4.4))(react-dom@18.3.1(react@18.2.0))(react-native-svg@13.4.0(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-web@0.19.12(react-dom@18.3.1(react@18.2.0))(react@18.2.0))(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))
       '@gluestack-ui/themed':
         specifier: ^1.1.32
         version: 1.1.32(@gluestack-style/react@1.0.56)(@types/react-native@0.73.0(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(nativewind@2.0.11(react@18.2.0)(tailwindcss@3.4.4))(react-dom@18.3.1(react@18.2.0))(react-native-svg@13.4.0(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-web@0.19.12(react-dom@18.3.1(react@18.2.0))(react@18.2.0))(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
@@ -1032,6 +1035,12 @@ packages:
     peerDependencies:
       react: '>=16'
       react-dom: '>=16'
+
+  '@gluestack-ui/config@1.1.18':
+    resolution: {integrity: sha512-O7sP3cwxUNWMMBmrI7djR8M6xq1Gi5YdJuugBkJMcVwKgD8SzPbxACX20hONEMMua5hLwXPvVOzAX24WooxLkw==}
+    peerDependencies:
+      '@gluestack-style/react': '>=1.0'
+      '@gluestack-ui/themed': '>=1.1'
 
   '@gluestack-ui/divider@0.1.8':
     resolution: {integrity: sha512-l+OQ1XD5qI20ghxKbpi+pqntRtd0mtkmhfXYLODbjt2eec3U9kpV1xawXpfN/TFd45WWZTpEQ616sOQqFLo3RA==}
@@ -7041,6 +7050,11 @@ snapshots:
       react-dom: 18.3.1(react@18.2.0)
     transitivePeerDependencies:
       - react-native
+
+  '@gluestack-ui/config@1.1.18(@gluestack-style/react@1.0.56)(@gluestack-ui/themed@1.1.32(@gluestack-style/react@1.0.56)(@types/react-native@0.73.0(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(nativewind@2.0.11(react@18.2.0)(tailwindcss@3.4.4))(react-dom@18.3.1(react@18.2.0))(react-native-svg@13.4.0(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-web@0.19.12(react-dom@18.3.1(react@18.2.0))(react@18.2.0))(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))':
+    dependencies:
+      '@gluestack-style/react': 1.0.56
+      '@gluestack-ui/themed': 1.1.32(@gluestack-style/react@1.0.56)(@types/react-native@0.73.0(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(nativewind@2.0.11(react@18.2.0)(tailwindcss@3.4.4))(react-dom@18.3.1(react@18.2.0))(react-native-svg@13.4.0(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0))(react-native-web@0.19.12(react-dom@18.3.1(react@18.2.0))(react@18.2.0))(react-native@0.74.3(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.2.79)(react@18.2.0))(react@18.2.0)
 
   '@gluestack-ui/divider@0.1.8(react-dom@18.3.1(react@18.2.0))(react@18.2.0)':
     dependencies:
