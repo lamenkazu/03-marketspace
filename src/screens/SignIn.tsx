@@ -1,6 +1,7 @@
 import {
   Button,
   ButtonText,
+  Center,
   EyeIcon,
   Input,
   InputField,
@@ -9,12 +10,27 @@ import {
   Text,
   VStack,
 } from '@gluestack-ui/themed'
+import { useNavigation } from '@react-navigation/native'
+import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 
 import Logo from '@/assets/logo.svg'
 import Marketspace from '@/assets/marketspace.svg'
+import { AuthNavigatorProps } from '@/routes/auth.routes'
 
 export const SignIn = () => {
+  const { navigate } = useNavigation<AuthNavigatorProps>()
+
+  const handleGoToSignUp = () => {
+    navigate('signUp')
+  }
+
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
+  const handlePasswordVisible = () => {
+    setIsPasswordVisible(!isPasswordVisible)
+  }
+
   return (
     <ScrollView flex={1} bg="$white">
       <VStack
@@ -51,23 +67,30 @@ export const SignIn = () => {
 
           <Input
             h={45}
-            px={16}
+            pl={16}
             bg="$gray700"
             borderRadius={6}
             borderColor="transparent"
             $focus-borderColor="$bluelight"
           >
-            <InputField placeholder="Senha" bg="$gray700" secureTextEntry />
-            <InputSlot>
-              <TouchableOpacity>
-                <EyeIcon />
-              </TouchableOpacity>
-            </InputSlot>
+            <InputField
+              placeholder="Senha"
+              bg="$gray700"
+              secureTextEntry={isPasswordVisible}
+            />
+            <Center paddingHorizontal={10}>
+              <InputSlot>
+                <TouchableOpacity onPress={handlePasswordVisible}>
+                  <EyeIcon />
+                </TouchableOpacity>
+              </InputSlot>
+            </Center>
           </Input>
 
           <Button
             w={'$full'}
             bg="$bluelight"
+            borderRadius={6}
             size={'xl'}
             mt={32}
             onPress={() => console.log('uai')}
@@ -85,7 +108,7 @@ export const SignIn = () => {
       </VStack>
 
       <VStack alignItems="center" px={48} pb={20}>
-        <Text mt={54} fontSize={'$sm'}>
+        <Text mt={54} fontSize={'$sm'} color={'$gray200'}>
           Ainda não tem acesso?
         </Text>
 
@@ -93,8 +116,9 @@ export const SignIn = () => {
           w={'$full'}
           bg="$gray500"
           size={'xl'}
+          borderRadius={6}
           mt={16}
-          onPress={() => console.log('ok')}
+          onPress={handleGoToSignUp}
           $active-opacity={0.8}
         >
           <ButtonText fontFamily="$heading" fontSize={'$sm'} color={'$gray200'}>
