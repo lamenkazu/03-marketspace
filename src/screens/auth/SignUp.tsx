@@ -1,6 +1,4 @@
 import {
-  HStack,
-  Image,
   ScrollView,
   Text,
   Toast,
@@ -17,8 +15,8 @@ import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import Avatar from '@/assets/avatar.png'
 import Logo from '@/assets/logo.svg'
+import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { AuthNavigatorProps } from '@/routes/auth.routes'
@@ -176,33 +174,15 @@ export const SignUp = () => {
           seus produtos
         </Text>
 
-        {/* Image Picker */}
-        <HStack alignItems="center" flex={1} pl={50}>
-          <Image
-            source={userPhoto === '' ? Avatar : { uri: userPhoto }}
-            alt="Foto do usuario"
-            mt={32}
-            borderRadius={999}
-            borderWidth={3}
-            borderColor="$bluelight"
-            h={PHOTO_SIZE}
-            w={PHOTO_SIZE}
-            alignSelf="center"
-          />
-
-          <Button
-            top={'33%'}
-            right={'12%'}
-            h={40}
-            w={40}
-            position="relative"
-            borderRadius={'$full'}
-            onPress={handleSelectUserPhoto}
-            isButtonIcon
-            size={'md'}
-            Icon={PencilSimpleLine}
-          />
-        </HStack>
+        {/* ImagePicker */}
+        <Avatar
+          mt={32}
+          userPhoto={userPhoto}
+          avatarSize={PHOTO_SIZE}
+          hasButton
+          Icon={PencilSimpleLine}
+          onPress={handleSelectUserPhoto}
+        />
 
         {/* Form */}
         <VStack mt={16} alignItems="center" w={'$full'} pb={20}>
