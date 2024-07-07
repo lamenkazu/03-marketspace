@@ -1,6 +1,17 @@
-import { HStack, Image, ScrollView, Text, VStack } from '@gluestack-ui/themed'
+import {
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  Toast,
+  ToastDescription,
+  ToastTitle,
+  useToast,
+  VStack,
+} from '@gluestack-ui/themed'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation } from '@react-navigation/native'
+import * as ImagePicker from 'expo-image-picker'
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -11,6 +22,8 @@ import Logo from '@/assets/logo.svg'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { AuthNavigatorProps } from '@/routes/auth.routes'
+
+const PHOTO_SIZE = 88
 
 const signUpSchema = z
   .object({
@@ -38,16 +51,78 @@ const signUpSchema = z
 type SignUpSchema = z.infer<typeof signUpSchema>
 
 export const SignUp = () => {
+  // Toast
+  const toast = useToast()
+
   // Navigation
   const { navigate } = useNavigation<AuthNavigatorProps>()
   const handleGoToSignIn = () => {
     navigate('signIn')
   }
 
-  // Password Visible
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const handlePasswordVisible = () => {
-    setIsPasswordVisible(!isPasswordVisible)
+  // Photo
+  const [userPhoto, setUserPhoto] = useState('')
+  const handleSelectUserPhoto = async () => {
+    try {
+      const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images, // tipo de conteudo que quer selecionar da galeria do usuario
+        quality: 1, // qualidade da imagem vai de 0 a 1
+        aspect: [4, 4], // Aspecto da imagem. No caso, 4 por 4 é uma imagem quadrada, poderia ser 3/4 e dai em diante.
+        allowsEditing: true, // Permite o usuário editar a imagem após selecionar ela.
+      })
+
+      if (selectedPhoto.canceled) {
+        return // Se o usuario cancelar a seleção de foto, nada deve ser feito.
+      }
+
+      const { fileSize, uri } = selectedPhoto.assets[0]
+
+      if (uri && fileSize) {
+        const fileSizeInMb = fileSize / 1024 / 1024
+
+        if (fileSizeInMb > 5) {
+          return toast.show({
+            duration: 1800,
+            placement: 'top',
+            render: ({ id }) => {
+              const toastId = 'toast-' + id
+              return (
+                <Toast
+                  mt={50}
+                  nativeID={toastId}
+                  action="success"
+                  variant="accent"
+                >
+                  <VStack w={'$72'}>
+                    <ToastTitle>Imagem muito grande!</ToastTitle>
+                    <ToastDescription>Ecolha uma de até 5MB </ToastDescription>
+                  </VStack>
+                </Toast>
+              )
+            },
+          })
+        }
+
+        setUserPhoto(uri)
+      }
+
+      toast.show({
+        duration: 1800,
+        placement: 'top',
+        render: ({ id }) => {
+          const toastId = 'toast-' + id
+          return (
+            <Toast mt={50} nativeID={toastId} action="success" variant="accent">
+              <VStack w={'$72'}>
+                <ToastTitle>Foto atualizada!</ToastTitle>
+              </VStack>
+            </Toast>
+          )
+        },
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   // Form
@@ -65,6 +140,12 @@ export const SignUp = () => {
       confirmPassword: '',
     },
   })
+
+  // Password Visible
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const handlePasswordVisible = () => {
+    setIsPasswordVisible(!isPasswordVisible)
+  }
 
   const handleSignUp = async (data: SignUpSchema) => {
     console.log(data)
@@ -98,14 +179,14 @@ export const SignUp = () => {
         {/* Image Picker */}
         <HStack alignItems="center" flex={1} pl={50}>
           <Image
-            source={Avatar}
+            source={userPhoto === '' ? Avatar : { uri: userPhoto }}
             alt="Foto do usuario"
             mt={32}
             borderRadius={999}
             borderWidth={3}
             borderColor="$bluelight"
-            h={88}
-            w={88}
+            h={PHOTO_SIZE}
+            w={PHOTO_SIZE}
             alignSelf="center"
           />
 
@@ -116,7 +197,7 @@ export const SignUp = () => {
             w={40}
             position="relative"
             borderRadius={'$full'}
-            onPress={() => console.log('click')}
+            onPress={handleSelectUserPhoto}
             isButtonIcon
             size={'md'}
             Icon={PencilSimpleLine}
