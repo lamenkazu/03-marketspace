@@ -1,0 +1,96 @@
+import {
+  AlertCircleIcon,
+  Center,
+  EyeIcon,
+  FormControl,
+  FormControlError,
+  FormControlErrorIcon,
+  FormControlErrorText,
+  Input as GluestackInput,
+  InputField,
+  InputSlot,
+} from '@gluestack-ui/themed'
+import { ComponentProps } from 'react'
+import {
+  KeyboardTypeOptions,
+  ReturnKeyTypeOptions,
+  TouchableOpacity,
+} from 'react-native'
+
+interface InputProps extends ComponentProps<typeof GluestackInput> {
+  errorMessage?: string | null
+  placeholder: string
+  onChange: (...event: string[]) => void
+  onPressPasswordEye?: () => void
+  secureText?: boolean
+  keyType?: KeyboardTypeOptions
+  onSubmit?: () => void
+  returnKeyType?: ReturnKeyTypeOptions
+}
+
+export const Input = ({
+  errorMessage = null,
+  isInvalid,
+  placeholder,
+  onSubmit,
+  onChange,
+  onPressPasswordEye,
+  returnKeyType = 'default',
+  secureText,
+  keyType = 'default',
+  ...props
+}: InputProps) => {
+  const invalid = !!errorMessage || isInvalid
+  const isPassword = !!onPressPasswordEye
+
+  return (
+    <FormControl w={'$full'} isInvalid={invalid}>
+      <FormControlError>
+        <FormControlErrorIcon as={AlertCircleIcon} />
+        <FormControlErrorText>{errorMessage}</FormControlErrorText>
+      </FormControlError>
+
+      <GluestackInput
+        mb={16}
+        h={45}
+        px={16}
+        isInvalid={invalid}
+        borderRadius={6}
+        bg="$gray700"
+        borderColor="transparent"
+        borderWidth={0}
+        $focus-borderColor="$bluelight"
+        $invalid-borderWidth={1}
+        $invalid-borderColor="$red700"
+        {...props}
+      >
+        <InputField
+          onChangeText={onChange}
+          placeholder={placeholder}
+          secureTextEntry={secureText}
+          keyboardType={keyType}
+          onSubmitEditing={onSubmit}
+          returnKeyType={returnKeyType}
+        />
+
+        {isPassword && (
+          <Center>
+            <TouchableOpacity
+              style={{
+                height: '100%',
+                justifyContent: 'center',
+                paddingRight: 15,
+                paddingLeft: 25,
+              }}
+              onPress={onPressPasswordEye}
+            >
+              <InputSlot>
+                <EyeIcon />
+              </InputSlot>
+            </TouchableOpacity>
+          </Center>
+        )}
+      </GluestackInput>
+    </FormControl>
+  )
+}
