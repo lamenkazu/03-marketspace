@@ -16,7 +16,7 @@ export const Home = () => {
     >
       <Header mb={32} />
 
-      <Section title="Seus produtos anunciados para venda">
+      <Section mb={36} title="Seus produtos anunciados para venda">
         <SelfProducts />
       </Section>
 

@@ -10,6 +10,7 @@ export const THEME = {
       ...config.tokens.colors,
       blue: '#364D9D',
       bluelight: '#647AC7',
+      bluelightopacity: '#647AC71A',
       redlight: '#EE7979',
       gray100: '#1A181B',
       gray200: '#3E3A40',
