@@ -1,9 +1,13 @@
-import { Center, Text } from '@gluestack-ui/themed'
+import { VStack } from '@gluestack-ui/themed'
+
+import { AdvertList } from './AdvertList'
+import { SearchAdvert } from './SearchAdvert'
 
 export const BuyProducts = () => {
   return (
-    <Center>
-      <Text>BuyProducts</Text>
-    </Center>
+    <VStack flex={1}>
+      <SearchAdvert />
+      <AdvertList bg={'$amber100'} />
+    </VStack>
   )
 }

@@ -20,7 +20,7 @@ export const Home = () => {
         <SelfProducts />
       </Section>
 
-      <Section title="Compre produtos variados">
+      <Section flex={1} title="Compre produtos variados">
         <BuyProducts />
       </Section>
     </SafeAreaView>
