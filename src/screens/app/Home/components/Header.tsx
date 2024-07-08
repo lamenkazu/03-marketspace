@@ -1,12 +1,20 @@
 import { HStack, Text } from '@gluestack-ui/themed'
 import Plus from 'phosphor-react-native/src/icons/Plus'
+import { ComponentProps } from 'react'
 
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
 
-export const Header = () => {
+interface HeaderProps extends ComponentProps<typeof HStack> {}
+
+export const Header = ({ ...props }: HeaderProps) => {
   return (
-    <HStack gap={10} alignItems="center" justifyContent="space-between">
+    <HStack
+      gap={10}
+      alignItems="center"
+      justifyContent="space-between"
+      {...props}
+    >
       <Avatar userPhoto="https://github.com/lamenkazu.png" avatarSize={45} />
       <Text flex={1} color={'$gray100'}>
         Boas vindas,{' '}

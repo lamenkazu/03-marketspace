@@ -8,7 +8,9 @@ interface SectionProps extends ComponentProps<typeof VStack> {
 export const Section = ({ title, children }: SectionProps) => {
   return (
     <VStack>
-      <Text>{title}</Text>
+      <Text fontSize={'$sm'} color={'$gray300'} mb={12}>
+        {title}
+      </Text>
       {children}
     </VStack>
   )

@@ -7,8 +7,14 @@ import { SelfProducts } from './components/SelfProducts'
 
 export const Home = () => {
   return (
-    <SafeAreaView style={{ paddingHorizontal: 24, marginTop: 12 }}>
-      <Header />
+    <SafeAreaView
+      style={{
+        paddingHorizontal: 24,
+        marginTop: 12,
+        flex: 1,
+      }}
+    >
+      <Header mb={32} />
 
       <Section title="Seus produtos anunciados para venda">
         <SelfProducts />
