@@ -1,6 +1,9 @@
 import { HStack, Image, Text, VStack } from '@gluestack-ui/themed'
+import { useNavigation } from '@react-navigation/native'
 import { ComponentProps } from 'react'
 import { TouchableOpacity } from 'react-native'
+
+import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 import { Avatar } from './Avatar'
 import { Tag, TagTitleVariants, TagVariants } from './Tag'
@@ -15,9 +18,16 @@ export const AdvertisingCard = ({
   tagTitle,
   ...props
 }: AdvertisingCardProps) => {
-  //   const isFirst = index % 2 === 0
+  const { navigate } = useNavigation<AppNavigationRoutesProp>()
+  const handleGoToProductDetails = () => {
+    navigate('details', { id: '1' })
+  }
+
   return (
-    <TouchableOpacity style={{ width: '50%' }}>
+    <TouchableOpacity
+      style={{ width: '50%' }}
+      onPress={handleGoToProductDetails}
+    >
       <VStack {...props} mb={24}>
         <HStack
           justifyContent="space-between"

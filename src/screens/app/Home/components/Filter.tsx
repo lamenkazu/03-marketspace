@@ -23,7 +23,7 @@ import { useState } from 'react'
 import { Button } from '@/components/Button'
 import { Tag } from '@/components/Tag'
 
-import { LabelTitle } from './LabelTitle'
+import { LabelTitle } from '../../../../components/LabelTitle'
 
 interface ContitionProps {
   new: boolean

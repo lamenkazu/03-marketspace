@@ -2,26 +2,10 @@ import { Box, Center, Icon, Text } from '@gluestack-ui/themed'
 import XCircle from 'phosphor-react-native/src/icons/XCircle'
 import { ComponentProps } from 'react'
 
+import { FontSize } from '@/@types/font'
+
 export type TagVariants = 'new' | 'used' | 'neutral'
 export type TagTitleVariants = 'Novo' | 'Usado'
-
-type FontSize =
-  | '$xs'
-  | '$sm'
-  | '$md'
-  | '$lg'
-  | '$xl'
-  | '$2xl'
-  | '$3xl'
-  | '$2xs'
-  | (number & {})
-  | '$4xl'
-  | '$5xl'
-  | '$6xl'
-  | '$7xl'
-  | '$8xl'
-  | '$9xl'
-  | undefined
 
 const variantColors: Record<TagVariants, string> = {
   new: '$blue',
