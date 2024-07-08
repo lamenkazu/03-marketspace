@@ -7,7 +7,7 @@ export const BuyProducts = () => {
   return (
     <VStack flex={1}>
       <SearchAdvert />
-      <AdvertList bg={'$amber100'} />
+      <AdvertList />
     </VStack>
   )
 }

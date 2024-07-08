@@ -1,13 +1,19 @@
 import { HStack, Text } from '@gluestack-ui/themed'
+import { useNavigation } from '@react-navigation/native'
 import Plus from 'phosphor-react-native/src/icons/Plus'
 import { ComponentProps } from 'react'
 
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
+import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 interface HeaderProps extends ComponentProps<typeof HStack> {}
 
 export const Header = ({ ...props }: HeaderProps) => {
+  const { navigate } = useNavigation<AppNavigationRoutesProp>()
+  const handleGoToNewAdvert = () => {
+    navigate('new')
+  }
   return (
     <HStack
       gap={10}
@@ -30,6 +36,7 @@ export const Header = ({ ...props }: HeaderProps) => {
         h={42}
         size="sm"
         bg={'$gray100'}
+        onPress={handleGoToNewAdvert}
       />
     </HStack>
   )

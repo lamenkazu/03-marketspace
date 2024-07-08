@@ -10,7 +10,7 @@ export const Home = () => {
     <SafeAreaView
       style={{
         paddingHorizontal: 24,
-        marginTop: 12,
+        marginTop: 30,
         flex: 1,
       }}
     >

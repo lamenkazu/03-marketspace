@@ -23,10 +23,17 @@ export const SearchAdvert = ({ ...props }: SearchAdvertProps) => {
       borderRadius={6}
       bg={'$gray700'}
       borderWidth={0}
+      px={18}
       alignItems="center"
       {...props}
     >
-      <InputField selectionColor={'#647AC766'} flex={1} />
+      <InputField
+        placeholder="Buscar anúncio"
+        placeholderTextColor={'$gray400'}
+        fontFamily="$body"
+        selectionColor={'#647AC766'}
+        flex={1}
+      />
 
       <InputSlot
         py={10}
@@ -40,7 +47,7 @@ export const SearchAdvert = ({ ...props }: SearchAdvertProps) => {
         </InputIcon>
       </InputSlot>
 
-      <Divider orientation="vertical" mx="$2.5" bg="$gray400" h={16} />
+      <Divider orientation="vertical" mx="$1.5" bg="$gray400" h={16} />
 
       <InputSlot
         py={10}

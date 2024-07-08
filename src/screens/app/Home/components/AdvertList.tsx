@@ -1,16 +1,21 @@
 import { FlatList, Text, View } from '@gluestack-ui/themed'
 import { ComponentProps } from 'react'
 
+import { AdvertisingCard } from '@/components/AdvertisingCard'
+
 interface AdvertListProps extends ComponentProps<typeof FlatList> {}
 
 export const AdvertList = ({ ...props }: AdvertListProps) => {
   const dataP = [
-    { id: '1', value: 'Item 1' },
-    { id: '2', value: 'Item 2' },
-    { id: '3', value: 'Item 3' },
-    { id: '4', value: 'Item 4' },
-    { id: '5', value: 'Item 5' },
-    { id: '6', value: 'Item 6' },
+    { id: '1', value: 'Item 1', variant: 'new' },
+    { id: '2', value: 'Item 2', variant: 'used' },
+    { id: '3', value: 'Item 3', variant: 'used' },
+    { id: '4', value: 'Item 4', variant: 'new' },
+    { id: '5', value: 'Item 5', variant: 'used' },
+    { id: '6', value: 'Item 6', variant: 'new' },
+    { id: '7', value: 'Item 7', variant: 'used' },
+    { id: '8', value: 'Item 8', variant: 'new' },
+    { id: '9', value: 'Item 9', variant: 'new' },
   ]
   return (
     <FlatList
@@ -18,11 +23,19 @@ export const AdvertList = ({ ...props }: AdvertListProps) => {
       data={dataP}
       keyExtractor={(item) => item.id}
       numColumns={2}
-      renderItem={({ item }) => (
-        <View flex={1}>
-          <Text>{item.value}</Text>
-        </View>
+      columnWrapperStyle={{
+        marginRight: 20,
+        gap: 20,
+        justifyContent: 'space-between',
+      }}
+      renderItem={({ item, index }) => (
+        <AdvertisingCard
+          tagTitle={item.variant === 'new' ? 'Novo' : 'Usado'}
+          tagVariant={item.variant === 'new' ? 'new' : 'used'}
+        />
       )}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ paddingBottom: 75 }}
       {...props}
     />
   )
