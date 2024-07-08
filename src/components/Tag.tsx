@@ -45,7 +45,11 @@ export const Tag = ({
           fontFamily="$heading"
           fontSize={textSize}
           alignSelf="center"
-          color={isFilter && !isSelected ? '$gray300' : '$gray700'}
+          color={
+            (isFilter && !isSelected) || variant === 'neutral'
+              ? '$gray300'
+              : '$gray700'
+          }
         >
           {title.toUpperCase()}
         </Text>

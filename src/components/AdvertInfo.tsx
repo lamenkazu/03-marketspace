@@ -44,7 +44,9 @@ export const AdvertInfo = () => {
               avatarSize={24}
               borderWidth={1}
             />
-            <Text>Erick Etiene</Text>
+            <Text fontSize={'$sm'} color={'$gray100'}>
+              Erick Etiene
+            </Text>
           </HStack>
 
           {/* Tag */}
