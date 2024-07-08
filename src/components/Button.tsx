@@ -1,11 +1,12 @@
 import {
   Button as GluestackButton,
-  ButtonIcon,
   ButtonSpinner,
   ButtonText,
   Center,
+  HStack,
+  Icon,
 } from '@gluestack-ui/themed'
-import { Icon } from 'phosphor-react-native'
+import { Icon as PhosphorIcon } from 'phosphor-react-native'
 import { ComponentProps } from 'react'
 
 interface ButtonProps extends ComponentProps<typeof GluestackButton> {
@@ -13,7 +14,7 @@ interface ButtonProps extends ComponentProps<typeof GluestackButton> {
   color?: string
   isLoading?: boolean
   isButtonIcon?: boolean
-  Icon?: Icon
+  ButtonIcon?: PhosphorIcon
 }
 
 export const Button = ({
@@ -21,7 +22,7 @@ export const Button = ({
   color = '$gray700',
   isLoading = false,
   isButtonIcon = false,
-  Icon,
+  ButtonIcon,
   onPress,
   ...props
 }: ButtonProps) => {
@@ -40,12 +41,15 @@ export const Button = ({
         <Center>
           <ButtonSpinner mr="$1" color={color} />
         </Center>
-      ) : isButtonIcon ? (
-        <ButtonIcon as={Icon} />
       ) : (
-        <ButtonText fontFamily="$heading" fontSize={'$sm'} color={color}>
-          {title}
-        </ButtonText>
+        <HStack alignItems="center" gap={8} paddingHorizontal={12}>
+          {ButtonIcon && (
+            <Icon size={'sm'} color={'$gray700'} as={ButtonIcon} />
+          )}
+          <ButtonText fontFamily="$heading" fontSize={'$sm'} color={color}>
+            {title}
+          </ButtonText>
+        </HStack>
       )}
     </GluestackButton>
   )

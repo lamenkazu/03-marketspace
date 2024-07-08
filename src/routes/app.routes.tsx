@@ -38,17 +38,24 @@ export const AppRoutes = () => {
 
   return (
     <Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
         tabBarActiveTintColor: colors.gray200,
         tabBarInactiveTintColor: colors.gray400,
         tabBarStyle: {
+          display:
+            route.name === 'details' ||
+            route.name === 'edit' ||
+            route.name === 'new' ||
+            route.name === 'preview'
+              ? 'none'
+              : 'flex',
           backgroundColor: '#FFF',
           borderTopWidth: 0,
           height: 72,
         },
-      }}
+      })}
     >
       <Screen
         name="home"

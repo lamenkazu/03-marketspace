@@ -1,4 +1,4 @@
-import { Center } from '@gluestack-ui/themed'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { BuyProducts } from './components/BuyProducts'
 import { Header } from './components/Header'
@@ -7,7 +7,7 @@ import { SelfProducts } from './components/SelfProducts'
 
 export const Home = () => {
   return (
-    <Center flex={1}>
+    <SafeAreaView style={{ paddingHorizontal: 24, marginTop: 12 }}>
       <Header />
 
       <Section title="Seus produtos anunciados para venda">
@@ -17,6 +17,6 @@ export const Home = () => {
       <Section title="Compre produtos variados">
         <BuyProducts />
       </Section>
-    </Center>
+    </SafeAreaView>
   )
 }

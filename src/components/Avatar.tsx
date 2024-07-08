@@ -29,7 +29,7 @@ export const Avatar = ({
       h={avatarSize}
       w={avatarSize}
       borderRadius="$full"
-      borderWidth={3}
+      borderWidth={2}
       borderColor="$bluelight"
       {...props}
     >
@@ -48,7 +48,7 @@ export const Avatar = ({
           onPress={onPress}
           isButtonIcon
           size={'md'}
-          Icon={Icon}
+          ButtonIcon={Icon}
         />
       )}
     </GluestackAvatar>
