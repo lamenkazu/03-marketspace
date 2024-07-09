@@ -4,7 +4,7 @@ import {
   Karla_700Bold,
   useFonts,
 } from '@expo-google-fonts/karla'
-import { GluestackUIProvider } from '@gluestack-ui/themed'
+import { GluestackUIProvider, Spinner } from '@gluestack-ui/themed'
 import { StatusBar, View } from 'react-native'
 
 import { Routes } from '@/routes'
@@ -20,11 +20,15 @@ export default function App() {
     <GluestackUIProvider config={THEME}>
       <StatusBar
         barStyle="dark-content"
-        backgroundColor="transparent"
+        backgroundColor={THEME.tokens.colors.gray600}
         translucent
       />
 
-      {fontsLoaded ? <Routes /> : <View />}
+      {fontsLoaded ? (
+        <Routes />
+      ) : (
+        <Spinner bg={'$gray600'} flex={1} color={'$bluelight'} />
+      )}
     </GluestackUIProvider>
   )
 }

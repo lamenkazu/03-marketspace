@@ -12,6 +12,7 @@ import {
   SelectPortal,
   SelectTrigger,
   Text,
+  useStyled,
   View,
   VStack,
 } from '@gluestack-ui/themed'
@@ -36,11 +37,15 @@ export const MyAdverts = () => {
     console.log(selectedValue)
   }, [selectedValue])
 
+  const styled = useStyled()
+  const { colors } = styled.config.tokens
+
   return (
     <SafeAreaView
       style={{
         marginTop: 30,
         flex: 1,
+        backgroundColor: colors.gray600,
       }}
     >
       <VStack flex={1} px={24}>

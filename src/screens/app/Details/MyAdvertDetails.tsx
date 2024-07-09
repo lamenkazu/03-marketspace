@@ -1,4 +1,4 @@
-import { HStack, Icon, VStack } from '@gluestack-ui/themed'
+import { HStack, Icon, useStyled, VStack } from '@gluestack-ui/themed'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
@@ -35,11 +35,15 @@ export const MyAdvertDetails = () => {
     }, [returnToMyAdverts]),
   )
 
+  const styled = useStyled()
+  const { colors } = styled.config.tokens
+
   return (
     <SafeAreaView
       style={{
         marginTop: 30,
         flex: 1,
+        backgroundColor: colors.gray600,
       }}
     >
       <VStack flex={1}>

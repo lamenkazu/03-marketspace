@@ -7,14 +7,8 @@ import {
   ButtonGroup,
   ButtonIcon,
   ButtonSpinner,
-  Checkbox,
-  CheckboxIcon,
-  CheckboxIndicator,
-  CheckboxLabel,
-  CheckIcon,
   HStack,
   Pressable,
-  Switch,
   Text,
   VStack,
 } from '@gluestack-ui/themed'
@@ -22,6 +16,7 @@ import X from 'phosphor-react-native/src/icons/X'
 import { useState } from 'react'
 
 import { Button } from '@/components/Button'
+import { FilterInfo } from '@/components/FilterInfo'
 import { LabelTitle } from '@/components/LabelTitle'
 import { Tag } from '@/components/Tag'
 
@@ -45,14 +40,6 @@ export const Filter = ({
     new: false,
     used: false,
   })
-
-  const paymentData = [
-    'Boleto',
-    'Pix',
-    'Dinheiro',
-    'Cartão de Crédito',
-    'Depósito Bancário',
-  ]
 
   const handleConditionFilter = (filter: 'new' | 'used') => {
     switch (filter) {
@@ -137,42 +124,7 @@ export const Filter = ({
             </HStack>
           </VStack>
 
-          <VStack>
-            <LabelTitle>Aceita troca?</LabelTitle>
-            <Switch size="lg" mt={-10} alignSelf="flex-start" />
-          </VStack>
-
-          <VStack>
-            <LabelTitle>Meios de pagamento aceitos</LabelTitle>
-            {paymentData.map((item) => (
-              <Checkbox
-                key={item}
-                mb={14}
-                value="uai"
-                size="md"
-                aria-label="Checkbox para selecionar meios de pagamento aceitos"
-              >
-                <CheckboxIndicator
-                  h={18}
-                  w={18}
-                  mr="$2"
-                  $checked-borderWidth={0}
-                  $checked-bg="$bluelight"
-                >
-                  <CheckboxIcon
-                    as={CheckIcon}
-                    color={'$gray700'}
-                    size="2xs"
-                    h={13}
-                    w={13}
-                  />
-                </CheckboxIndicator>
-                <CheckboxLabel fontFamily="$body" fontSize={'$md'}>
-                  {item}
-                </CheckboxLabel>
-              </Checkbox>
-            ))}
-          </VStack>
+          <FilterInfo />
 
           <ButtonGroup mt={50} mb={32}>
             <Button

@@ -1,9 +1,30 @@
-import { Center, Text } from '@gluestack-ui/themed'
+import { useStyled, VStack } from '@gluestack-ui/themed'
+import { SafeAreaView } from 'react-native-safe-area-context'
+
+import { ActionsButtonGorup } from './components/ActionsButtonGroup'
+import { Form } from './components/Form'
+import { Header } from './components/Header'
 
 export const EditAdvert = () => {
+  const styled = useStyled()
+
+  const { colors } = styled.config.tokens
+
   return (
-    <Center flex={1}>
-      <Text>EditAdvert</Text>
-    </Center>
+    <SafeAreaView
+      style={{
+        marginTop: 30,
+        flex: 1,
+        backgroundColor: colors.gray600,
+      }}
+    >
+      <VStack flex={1} px={24}>
+        <Header title="Editar anúncio" />
+
+        <Form />
+      </VStack>
+
+      <ActionsButtonGorup />
+    </SafeAreaView>
   )
 }

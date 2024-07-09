@@ -1,4 +1,4 @@
-import { Box, HStack, Icon, VStack } from '@gluestack-ui/themed'
+import { Box, HStack, Icon, useStyled, VStack } from '@gluestack-ui/themed'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import WhatsappLogo from 'phosphor-react-native/src/icons/WhatsappLogo'
@@ -32,11 +32,15 @@ export const OthersAdvertDetails = () => {
     }, [returnToHome]),
   )
 
+  const styled = useStyled()
+  const { colors } = styled.config.tokens
+
   return (
     <SafeAreaView
       style={{
         marginTop: 30,
         flex: 1,
+        backgroundColor: colors.gray600,
       }}
     >
       <VStack flex={1}>

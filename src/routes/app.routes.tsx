@@ -58,7 +58,7 @@ export const AppRoutes = () => {
             route.name === 'preview'
               ? 'none'
               : 'flex',
-          backgroundColor: '#FFF',
+          backgroundColor: colors.gray700,
           borderTopWidth: 0,
           height: 72,
         },

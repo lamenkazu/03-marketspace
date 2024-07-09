@@ -41,7 +41,6 @@ export const AdvertInfo = ({ isEdit = false }: AdvertInfoProps) => {
   return (
     <VStack flex={1}>
       {/* Image */}
-
       <HStack>
         <Image
           w={'$full'}

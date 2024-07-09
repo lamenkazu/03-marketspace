@@ -9,6 +9,7 @@ import {
   Input as GluestackInput,
   InputField,
   InputSlot,
+  Text,
 } from '@gluestack-ui/themed'
 import { ComponentProps } from 'react'
 import {
@@ -20,6 +21,7 @@ import {
 interface InputProps extends ComponentProps<typeof GluestackInput> {
   errorMessage?: string | null
   placeholder: string
+  prefix?: string
   onChange: (...event: string[]) => void
   onPressPasswordEye?: () => void
   secureText?: boolean
@@ -31,6 +33,7 @@ interface InputProps extends ComponentProps<typeof GluestackInput> {
 export const Input = ({
   errorMessage = null,
   isInvalid,
+  prefix,
   placeholder,
   onSubmit,
   onChange,
@@ -64,13 +67,17 @@ export const Input = ({
         $invalid-borderColor="$red700"
         {...props}
       >
+        <Center>{prefix && <Text w={'auto'}>{prefix}</Text>}</Center>
         <InputField
+          flex={1}
           onChangeText={onChange}
           placeholder={placeholder}
+          placeholderTextColor="$gray400"
           secureTextEntry={secureText}
           keyboardType={keyType}
           onSubmitEditing={onSubmit}
           returnKeyType={returnKeyType}
+          fontFamily="$body"
         />
 
         {isPassword && (
