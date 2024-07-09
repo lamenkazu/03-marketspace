@@ -1,26 +1,29 @@
-import { Box, HStack, Icon, VStack } from '@gluestack-ui/themed'
+import { HStack, Icon, VStack } from '@gluestack-ui/themed'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
-import WhatsappLogo from 'phosphor-react-native/src/icons/WhatsappLogo'
+import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
 import { useCallback } from 'react'
 import { BackHandler, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { AdvertInfo } from '@/components/AdvertInfo'
-import { Button } from '@/components/Button'
-import { PriceLabel } from '@/components/PriceLabel'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
+import { AdvertInfo } from '@/screens/app/Details/components/AdvertInfo'
 
-export const OthersAdvertDetails = () => {
+export const MyAdvertDetails = () => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
-  const returnToHome = useCallback(() => {
-    navigate('home')
-  }, [])
+
+  const goToEdit = () => {
+    navigate('edit', { id: '1' })
+  }
+
+  const returnToMyAdverts = useCallback(() => {
+    navigate('my-adverts')
+  }, [navigate])
 
   useFocusEffect(
     useCallback(() => {
       const onBackPress = () => {
-        returnToHome()
+        returnToMyAdverts()
         return true
       }
 
@@ -29,7 +32,7 @@ export const OthersAdvertDetails = () => {
       return () => {
         BackHandler.removeEventListener('hardwareBackPress', onBackPress)
       }
-    }, [returnToHome]),
+    }, [returnToMyAdverts]),
   )
 
   return (
@@ -41,28 +44,18 @@ export const OthersAdvertDetails = () => {
     >
       <VStack flex={1}>
         {/* Header */}
-        <HStack px={24}>
-          <TouchableOpacity onPress={returnToHome}>
+        <HStack px={24} justifyContent="space-between">
+          <TouchableOpacity onPress={returnToMyAdverts}>
             <Icon as={ArrowLeft} h={1} w={1} size={'xl'} mb={16} />
+          </TouchableOpacity>
+
+          <TouchableOpacity onPress={goToEdit}>
+            <Icon as={PencilSimpleLine} h={1} w={1} size={'xl'} mb={16} />
           </TouchableOpacity>
         </HStack>
 
         {/* Advertising Info */}
-        <AdvertInfo />
-
-        {/* Footer */}
-        <Box h={90} bg={'#fff'} justifyContent="center" px={24}>
-          <HStack alignItems="center" justifyContent="space-between">
-            <PriceLabel size={'$2xl'} />
-
-            <Button
-              ButtonIcon={WhatsappLogo}
-              w={'60%'}
-              bg={'$bluelight'}
-              title="Entrar em contato"
-            />
-          </HStack>
-        </Box>
+        <AdvertInfo isEdit />
       </VStack>
     </SafeAreaView>
   )

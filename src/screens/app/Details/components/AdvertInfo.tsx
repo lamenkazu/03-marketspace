@@ -13,11 +13,11 @@ import Power from 'phosphor-react-native/src/icons/Power'
 import TrashSimple from 'phosphor-react-native/src/icons/TrashSimple'
 import { useState } from 'react'
 
-import { Avatar } from './Avatar'
-import { Button } from './Button'
-import { LabelTitle } from './LabelTitle'
-import { PriceLabel } from './PriceLabel'
-import { Tag } from './Tag'
+import { Avatar } from '@/components/Avatar'
+import { Button } from '@/components/Button'
+import { LabelTitle } from '@/components/LabelTitle'
+import { PriceLabel } from '@/components/PriceLabel'
+import { Tag } from '@/components/Tag'
 
 interface AdvertInfoProps {
   isEdit?: boolean

@@ -7,14 +7,14 @@ import House from 'phosphor-react-native/src/icons/House'
 import SignOut from 'phosphor-react-native/src/icons/SignOut'
 import Tag from 'phosphor-react-native/src/icons/Tag'
 
-import { EditAdvert } from '@/screens/app/EditAdvert'
+import { MyAdvertDetails } from '@/screens/app/Details/MyAdvertDetails'
+import { OthersAdvertDetails } from '@/screens/app/Details/OthersAdvertDetails'
+import { PreviewAdvert } from '@/screens/app/Details/PreviewAdvert'
 import { Empty } from '@/screens/app/Empty'
+import { EditAdvert } from '@/screens/app/Form/EditAdvert'
+import { NewAdvert } from '@/screens/app/Form/NewAdvert'
 import { Home } from '@/screens/app/Home'
-import { MyAdvertDetails } from '@/screens/app/MyAdvertDetails'
 import { MyAdverts } from '@/screens/app/MyAdverts'
-import { NewAdvert } from '@/screens/app/NewAdvert'
-import { OthersAdvertDetails } from '@/screens/app/OthersAdvertDetails'
-import { PreviewAdvert } from '@/screens/app/PreviewAdvert'
 
 type AppRoutesProps = {
   home: undefined
