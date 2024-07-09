@@ -7,8 +7,10 @@ import {
   useStyled,
   VStack,
 } from '@gluestack-ui/themed'
+import { useFocusEffect } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import Tag from 'phosphor-react-native/src/icons/Tag'
+import { useCallback } from 'react'
 import { StatusBar } from 'react-native'
 
 import { Button } from '@/components/Button'
@@ -19,6 +21,20 @@ export const PreviewAdvert = () => {
   const styled = useStyled()
   const { colors } = styled.config.tokens
 
+  useFocusEffect(
+    useCallback(() => {
+      // Defina a cor da StatusBar quando a tela estiver em foco
+      StatusBar.setBarStyle('dark-content')
+      StatusBar.setBackgroundColor(colors.bluelight)
+
+      // Restaure a cor da StatusBar quando sair da tela
+      return () => {
+        StatusBar.setBarStyle('dark-content')
+        StatusBar.setBackgroundColor(colors.gray600)
+      }
+    }, [colors.bluelight, colors.gray600]),
+  )
+
   return (
     <SafeAreaView
       style={{
@@ -27,11 +43,6 @@ export const PreviewAdvert = () => {
         backgroundColor: colors.gray600,
       }}
     >
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor={colors.bluelight}
-        translucent
-      />
       <VStack flex={1}>
         {/* Header */}
         <Center h={120} bg={'$bluelight'} px={24}>
