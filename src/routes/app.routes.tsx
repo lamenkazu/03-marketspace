@@ -7,23 +7,29 @@ import House from 'phosphor-react-native/src/icons/House'
 import SignOut from 'phosphor-react-native/src/icons/SignOut'
 import Tag from 'phosphor-react-native/src/icons/Tag'
 
-import { Details } from '@/screens/app/Details'
 import { EditAdvert } from '@/screens/app/EditAdvert'
 import { Empty } from '@/screens/app/Empty'
 import { Home } from '@/screens/app/Home'
+import { MyAdvertDetails } from '@/screens/app/MyAdvertDetails'
 import { MyAdverts } from '@/screens/app/MyAdverts'
 import { NewAdvert } from '@/screens/app/NewAdvert'
+import { OthersAdvertDetails } from '@/screens/app/OthersAdvertDetails'
 import { PreviewAdvert } from '@/screens/app/PreviewAdvert'
 
 type AppRoutesProps = {
   home: undefined
-  details: {
+  'my-advert-details': {
+    id: string
+  }
+  'others-advert-details': {
     id: string
   }
   'my-adverts': undefined
   new: undefined
   preview: undefined
-  edit: undefined
+  edit: {
+    id: string
+  }
   'sign-out': undefined
 }
 
@@ -45,7 +51,8 @@ export const AppRoutes = () => {
         tabBarInactiveTintColor: colors.gray400,
         tabBarStyle: {
           display:
-            route.name === 'details' ||
+            route.name === 'my-advert-details' ||
+            route.name === 'others-advert-details' ||
             route.name === 'edit' ||
             route.name === 'new' ||
             route.name === 'preview'
@@ -71,8 +78,14 @@ export const AppRoutes = () => {
         }}
       />
       <Screen
-        name="details"
-        component={Details}
+        name="others-advert-details"
+        component={OthersAdvertDetails}
+        options={{ tabBarButton: () => null }}
+      />
+
+      <Screen
+        name="my-advert-details"
+        component={MyAdvertDetails}
         options={{ tabBarButton: () => null }}
       />
       <Screen

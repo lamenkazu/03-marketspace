@@ -12,23 +12,30 @@ import {
   SelectPortal,
   SelectTrigger,
   Text,
+  View,
   VStack,
 } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
-import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import Plus from 'phosphor-react-native/src/icons/Plus'
+import { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
-import { AdvertList } from './Home/components/AdvertList'
+import { AdvertList } from '../../components/AdvertList'
 
 export const MyAdverts = () => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
-  const returnToHome = () => {
-    navigate('home')
+  const handleGoToNewAdvert = () => {
+    navigate('new')
   }
+
+  // Select
+  const [selectedValue, setSelectedValue] = useState('all')
+  useEffect(() => {
+    console.log(selectedValue)
+  }, [selectedValue])
 
   return (
     <SafeAreaView
@@ -39,39 +46,46 @@ export const MyAdverts = () => {
     >
       <VStack flex={1} px={24}>
         {/* Header */}
-        <HStack>
-          <TouchableOpacity onPress={returnToHome}>
-            <Icon as={ArrowLeft} h={1} w={1} size={'xl'} mb={16} />
+        <HStack justifyContent="space-between" mb={36}>
+          <View />
+
+          <Text fontFamily="$heading" fontSize="$xl">
+            Meus anúncios
+          </Text>
+
+          <TouchableOpacity onPress={handleGoToNewAdvert}>
+            <Icon as={Plus} h={1} w={1} size={'xl'} />
           </TouchableOpacity>
-
-          <Text>Meus anúncios</Text>
-
-          <Icon as={Plus} />
         </HStack>
 
         {/*  */}
-        <HStack>
-          <Text>9 Alunos</Text>
+        <HStack justifyContent="space-between" alignItems="center" mb={20}>
+          <Text fontSize="$sm">9 anúncios</Text>
 
-          <Select flex={1}>
+          <Select
+            w={120}
+            initialLabel="Todos"
+            defaultValue="all"
+            onValueChange={(value) => setSelectedValue(value)}
+          >
             <SelectTrigger variant="outline" size="md">
-              <SelectInput placeholder="Select option" />
+              <SelectInput />
               <Icon as={ChevronDownIcon} mr="$3" />
             </SelectTrigger>
+
             <SelectPortal>
               <SelectBackdrop />
+
               <SelectContent>
                 <SelectDragIndicatorWrapper>
                   <SelectDragIndicator />
                 </SelectDragIndicatorWrapper>
-                <SelectItem label="UX Research" value="ux" />
-                <SelectItem label="Web Development" value="web" />
-                <SelectItem
-                  label="Cross Platform Development Process"
-                  value="cross-platform"
-                />
-                <SelectItem label="UI Designing" value="ui" isDisabled={true} />
-                <SelectItem label="Backend Development" value="backend" />
+
+                <SelectItem label="Todos" value="all" />
+
+                <SelectItem label="Ativos" value="active" />
+
+                <SelectItem label="Inativos" value="unactive" />
               </SelectContent>
             </SelectPortal>
           </Select>

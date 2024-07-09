@@ -10,7 +10,7 @@ import { Button } from '@/components/Button'
 import { PriceLabel } from '@/components/PriceLabel'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
-export const Details = () => {
+export const OthersAdvertDetails = () => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
   const returnToHome = () => {
     navigate('home')

@@ -1,9 +1,9 @@
-import { Text, View } from 'react-native'
+import { Center, Text } from '@gluestack-ui/themed'
 
 export const EditAdvert = () => {
   return (
-    <View>
+    <Center flex={1}>
       <Text>EditAdvert</Text>
-    </View>
+    </Center>
   )
 }

@@ -24,7 +24,10 @@ export const AdvertisingCard = ({
 }: AdvertisingCardProps) => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
   const handleGoToProductDetails = () => {
-    navigate('details', { id: '1' })
+    if (isSelfAdvert) {
+      return navigate('my-advert-details', { id: '1' })
+    }
+    navigate('others-advert-details', { id: '1' })
   }
 
   return (
@@ -54,16 +57,45 @@ export const AdvertisingCard = ({
           <Tag title={tagTitle} variant={tagVariant} />
         </HStack>
 
-        <Image
-          w={'$full'}
-          h={100}
-          source={{
-            uri: 'https://cdn.awsli.com.br/600x1000/1392/1392737/produto/188276783/d93e5dc2bc.jpg',
-          }}
-          alt="imagem do produto"
-          borderRadius={6}
-          position={'relative'}
-        />
+        <HStack>
+          <Image
+            w={'$full'}
+            h={100}
+            source={{
+              uri: 'https://cdn.awsli.com.br/600x1000/1392/1392737/produto/188276783/d93e5dc2bc.jpg',
+            }}
+            alt="imagem do produto"
+            borderRadius={6}
+            position={'relative'}
+          />
+
+          {!isActive ? (
+            <>
+              <View
+                bg={'$gray100'}
+                w={'$full'}
+                h={100}
+                position={'absolute'}
+                zIndex={1}
+                borderRadius={6}
+                opacity={0.45}
+              />
+              <Text
+                position={'absolute'}
+                zIndex={2}
+                w={'$full'}
+                bottom={0}
+                mb={12}
+                ml={8}
+                fontFamily="$heading"
+                color="$gray700"
+                fontSize={11}
+              >
+                {'Anúncio desativado'.toUpperCase()}
+              </Text>
+            </>
+          ) : null}
+        </HStack>
 
         <VStack ml={3} mt={8}>
           <Text $base-color="$gray200" fontSize={'$sm'}>
