@@ -2,7 +2,8 @@ import { HStack, Icon, VStack } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
-import { TouchableOpacity } from 'react-native'
+import { useCallback, useEffect } from 'react'
+import { BackHandler, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AdvertInfo } from '@/components/AdvertInfo'
@@ -10,12 +11,27 @@ import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 export const MyAdvertDetails = () => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
-  const returnToHome = () => {
-    navigate('home')
-  }
+
   const goToEdit = () => {
     navigate('edit', { id: '1' })
   }
+
+  const returnToMyAdverts = useCallback(() => {
+    navigate('my-adverts')
+  }, [navigate])
+
+  useEffect(() => {
+    const onBackPress = () => {
+      returnToMyAdverts()
+      return true
+    }
+
+    BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+    return () => {
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+    }
+  }, [returnToMyAdverts])
 
   return (
     <SafeAreaView
@@ -27,7 +43,7 @@ export const MyAdvertDetails = () => {
       <VStack flex={1}>
         {/* Header */}
         <HStack px={24} justifyContent="space-between">
-          <TouchableOpacity onPress={returnToHome}>
+          <TouchableOpacity onPress={returnToMyAdverts}>
             <Icon as={ArrowLeft} h={1} w={1} size={'xl'} mb={16} />
           </TouchableOpacity>
 

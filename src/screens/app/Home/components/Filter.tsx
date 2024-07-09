@@ -6,6 +6,7 @@ import {
   ActionsheetDragIndicatorWrapper,
   ButtonGroup,
   ButtonIcon,
+  ButtonSpinner,
   Checkbox,
   CheckboxIcon,
   CheckboxIndicator,
@@ -32,10 +33,15 @@ interface ContitionProps {
 
 interface FilterProps {
   showActionsheet: boolean
-  handleClose: () => void
+  toggleFilterVisibility: () => void
+  isLoading: boolean
 }
 
-export const Filter = ({ handleClose, showActionsheet }: FilterProps) => {
+export const Filter = ({
+  toggleFilterVisibility,
+  showActionsheet,
+  isLoading,
+}: FilterProps) => {
   const [condition, setCondition] = useState<ContitionProps>({
     new: false,
     used: false,
@@ -73,7 +79,11 @@ export const Filter = ({ handleClose, showActionsheet }: FilterProps) => {
   }
 
   return (
-    <Actionsheet isOpen={showActionsheet} onClose={handleClose} zIndex={999}>
+    <Actionsheet
+      isOpen={showActionsheet}
+      onClose={toggleFilterVisibility}
+      zIndex={999}
+    >
       <ActionsheetBackdrop />
 
       <ActionsheetContent h="$72" zIndex={999}>
@@ -86,8 +96,18 @@ export const Filter = ({ handleClose, showActionsheet }: FilterProps) => {
             <Text fontFamily={'$heading'} fontSize={'$xl'}>
               Filtrar anúncios
             </Text>
-            <Pressable onPress={handleClose}>
-              <ButtonIcon as={X} size={'xl'} color={'$gray400'} h={24} w={24} />
+            <Pressable onPress={toggleFilterVisibility}>
+              {isLoading ? (
+                <ButtonIcon
+                  as={X}
+                  size={'xl'}
+                  color={'$gray400'}
+                  h={24}
+                  w={24}
+                />
+              ) : (
+                <ButtonSpinner />
+              )}
             </Pressable>
           </HStack>
 

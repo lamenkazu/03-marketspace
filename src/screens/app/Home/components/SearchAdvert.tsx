@@ -1,10 +1,10 @@
 import {
+  ButtonSpinner,
   Divider,
   Icon,
   Input,
   InputField,
   InputIcon,
-  InputSlot,
   Pressable,
 } from '@gluestack-ui/themed'
 import MagnifyingGlass from 'phosphor-react-native/src/icons/MagnifyingGlass'
@@ -20,8 +20,10 @@ interface SearchAdvertProps extends ComponentProps<typeof Input> {}
  * Problema com Gluestack Types */
 
 export const SearchAdvert = ({ ...props }: SearchAdvertProps) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [showActionsheet, setShowActionsheet] = useState(false)
-  const handleClose = () => {
+  const toggleFilterVisibility = () => {
+    setIsLoading(!isLoading)
     setShowActionsheet(!showActionsheet)
   }
 
@@ -59,13 +61,26 @@ export const SearchAdvert = ({ ...props }: SearchAdvertProps) => {
 
       <Divider orientation="vertical" mx="$1.5" bg="$gray400" h={16} />
 
-      <Pressable py={10} px={5} onPress={handleClose} $active-opacity={0.8}>
+      <Pressable
+        py={10}
+        px={5}
+        onPress={toggleFilterVisibility}
+        $active-opacity={0.8}
+      >
         <InputIcon size="lg">
-          <Icon as={Sliders} weight={'bold'} size={'lg'} />
+          {isLoading ? (
+            <ButtonSpinner color={'$bluelight'} />
+          ) : (
+            <Icon as={Sliders} weight={'bold'} size={'lg'} />
+          )}
         </InputIcon>
       </Pressable>
 
-      <Filter handleClose={handleClose} showActionsheet={showActionsheet} />
+      <Filter
+        isLoading
+        toggleFilterVisibility={toggleFilterVisibility}
+        showActionsheet={showActionsheet}
+      />
     </Input>
   )
 }
