@@ -60,7 +60,6 @@ export const AdvertInfo = ({ isEdit = false }: AdvertInfoProps) => {
               h={280}
               position={'absolute'}
               zIndex={1}
-              borderRadius={6}
               opacity={0.45}
             />
             <Text

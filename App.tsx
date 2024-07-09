@@ -5,7 +5,7 @@ import {
   useFonts,
 } from '@expo-google-fonts/karla'
 import { GluestackUIProvider, Spinner } from '@gluestack-ui/themed'
-import { StatusBar, View } from 'react-native'
+import { StatusBar } from 'react-native'
 
 import { Routes } from '@/routes'
 import { THEME } from '@/theme'
