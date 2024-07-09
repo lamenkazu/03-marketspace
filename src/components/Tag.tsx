@@ -27,7 +27,6 @@ export const Tag = ({
   variant = 'neutral',
   isFilter = false,
   isSelected = false,
-
   ...props
 }: TagProps) => {
   return (
@@ -45,11 +44,7 @@ export const Tag = ({
           fontFamily="$heading"
           fontSize={textSize}
           alignSelf="center"
-          color={
-            (isFilter && !isSelected) || variant === 'neutral'
-              ? '$gray300'
-              : '$gray700'
-          }
+          color={variant === 'neutral' && !isSelected ? '$gray200' : '$gray700'}
         >
           {title.toUpperCase()}
         </Text>
