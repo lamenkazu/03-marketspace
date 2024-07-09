@@ -1,5 +1,8 @@
 import { useStyled } from '@gluestack-style/react'
 import { VStack } from '@gluestack-ui/themed'
+import { useFocusEffect } from '@react-navigation/native'
+import { useCallback } from 'react'
+import { Alert, BackHandler } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { BuyProducts } from './components/BuyProducts'
@@ -9,8 +12,29 @@ import { SelfProducts } from './components/SelfProducts'
 
 export const Home = () => {
   const styled = useStyled()
-
   const { colors } = styled.config.tokens
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        Alert.alert('Não vá', 'quer mesmo me deixar?', [
+          {
+            text: 'Vou ficar',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          { text: 'Vou sair', onPress: () => BackHandler.exitApp() },
+        ])
+        return true
+      }
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+      }
+    }, []),
+  )
 
   return (
     <SafeAreaView
