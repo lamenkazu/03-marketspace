@@ -1,14 +1,11 @@
-import { Box, HStack, Icon, VStack } from '@gluestack-ui/themed'
+import { HStack, Icon, VStack } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
-import WhatsappLogo from 'phosphor-react-native/src/icons/WhatsappLogo'
 import { TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AdvertInfo } from '@/components/AdvertInfo'
-import { Button } from '@/components/Button'
-import { PriceLabel } from '@/components/PriceLabel'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 export const MyAdvertDetails = () => {
@@ -40,21 +37,7 @@ export const MyAdvertDetails = () => {
         </HStack>
 
         {/* Advertising Info */}
-        <AdvertInfo />
-
-        {/* Footer */}
-        <Box h={90} bg={'#fff'} justifyContent="center" px={24}>
-          <HStack alignItems="center" justifyContent="space-between">
-            <PriceLabel size={'$2xl'} />
-
-            <Button
-              ButtonIcon={WhatsappLogo}
-              w={'60%'}
-              bg={'$bluelight'}
-              title="Entrar em contato"
-            />
-          </HStack>
-        </Box>
+        <AdvertInfo isEdit />
       </VStack>
     </SafeAreaView>
   )

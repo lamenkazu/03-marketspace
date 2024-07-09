@@ -18,13 +18,13 @@ import { PreviewAdvert } from '@/screens/app/PreviewAdvert'
 
 type AppRoutesProps = {
   home: undefined
-  'my-advert-details': {
-    id: string
-  }
   'others-advert-details': {
     id: string
   }
   'my-adverts': undefined
+  'my-advert-details': {
+    id: string
+  }
   new: undefined
   preview: undefined
   edit: {

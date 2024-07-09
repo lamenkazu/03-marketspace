@@ -43,9 +43,7 @@ export const Button = ({
         </Center>
       ) : (
         <HStack alignItems="center" gap={8} paddingHorizontal={12}>
-          {ButtonIcon && (
-            <Icon size={'sm'} color={'$gray700'} as={ButtonIcon} />
-          )}
+          {ButtonIcon && <Icon size={'sm'} color={color} as={ButtonIcon} />}
           <ButtonText fontFamily="$heading" fontSize={'$sm'} color={color}>
             {title}
           </ButtonText>
