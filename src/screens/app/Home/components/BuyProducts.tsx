@@ -1,6 +1,7 @@
 import { VStack } from '@gluestack-ui/themed'
 
-import { AdvertList } from '../../../../components/AdvertList'
+import { AdvertList } from '@/components/AdvertList'
+
 import { SearchAdvert } from './SearchAdvert'
 
 export const BuyProducts = () => {

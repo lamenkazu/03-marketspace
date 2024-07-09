@@ -1,8 +1,9 @@
 import { Box, HStack, Icon, VStack } from '@gluestack-ui/themed'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import WhatsappLogo from 'phosphor-react-native/src/icons/WhatsappLogo'
-import { TouchableOpacity } from 'react-native'
+import { useCallback } from 'react'
+import { BackHandler, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AdvertInfo } from '@/components/AdvertInfo'
@@ -12,9 +13,24 @@ import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 export const OthersAdvertDetails = () => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
-  const returnToHome = () => {
+  const returnToHome = useCallback(() => {
     navigate('home')
-  }
+  }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        returnToHome()
+        return true
+      }
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+      }
+    }, [returnToHome]),
+  )
 
   return (
     <SafeAreaView

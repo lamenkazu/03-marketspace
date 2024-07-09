@@ -22,9 +22,8 @@ import X from 'phosphor-react-native/src/icons/X'
 import { useState } from 'react'
 
 import { Button } from '@/components/Button'
+import { LabelTitle } from '@/components/LabelTitle'
 import { Tag } from '@/components/Tag'
-
-import { LabelTitle } from '../../../../components/LabelTitle'
 
 interface ContitionProps {
   new: boolean

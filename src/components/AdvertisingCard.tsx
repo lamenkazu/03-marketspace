@@ -25,9 +25,10 @@ export const AdvertisingCard = ({
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
   const handleGoToProductDetails = () => {
     if (isSelfAdvert) {
-      return navigate('my-advert-details', { id: '1' })
+      navigate('my-advert-details', { id: '1' })
+    } else {
+      navigate('others-advert-details', { id: '1' })
     }
-    navigate('others-advert-details', { id: '1' })
   }
 
   return (

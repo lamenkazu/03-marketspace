@@ -1,8 +1,8 @@
 import { HStack, Icon, VStack } from '@gluestack-ui/themed'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { BackHandler, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -20,18 +20,20 @@ export const MyAdvertDetails = () => {
     navigate('my-adverts')
   }, [navigate])
 
-  useEffect(() => {
-    const onBackPress = () => {
-      returnToMyAdverts()
-      return true
-    }
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        returnToMyAdverts()
+        return true
+      }
 
-    BackHandler.addEventListener('hardwareBackPress', onBackPress)
+      BackHandler.addEventListener('hardwareBackPress', onBackPress)
 
-    return () => {
-      BackHandler.removeEventListener('hardwareBackPress', onBackPress)
-    }
-  }, [returnToMyAdverts])
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+      }
+    }, [returnToMyAdverts]),
+  )
 
   return (
     <SafeAreaView

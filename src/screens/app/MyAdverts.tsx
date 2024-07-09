@@ -21,9 +21,8 @@ import { useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { AdvertList } from '@/components/AdvertList'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
-
-import { AdvertList } from '../../components/AdvertList'
 
 export const MyAdverts = () => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
