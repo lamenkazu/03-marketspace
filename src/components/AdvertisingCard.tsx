@@ -1,4 +1,4 @@
-import { HStack, Image, Text, VStack } from '@gluestack-ui/themed'
+import { HStack, Image, Text, View, VStack } from '@gluestack-ui/themed'
 import { useNavigation } from '@react-navigation/native'
 import { ComponentProps } from 'react'
 import { TouchableOpacity } from 'react-native'
@@ -11,11 +11,15 @@ import { Tag, TagTitleVariants, TagVariants } from './Tag'
 interface AdvertisingCardProps extends ComponentProps<typeof VStack> {
   tagVariant: TagVariants
   tagTitle: TagTitleVariants
+  isSelfAdvert: boolean
+  isActive?: boolean
 }
 
 export const AdvertisingCard = ({
   tagVariant,
   tagTitle,
+  isSelfAdvert = false,
+  isActive = true,
   ...props
 }: AdvertisingCardProps) => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
@@ -36,12 +40,16 @@ export const AdvertisingCard = ({
           w={'$full'}
           p={3}
         >
-          <Avatar
-            userPhoto="https://github.com/lamenkazu.png"
-            avatarSize={24}
-            borderWidth={1}
-            borderColor="$gray700"
-          />
+          {!isSelfAdvert ? (
+            <Avatar
+              userPhoto="https://github.com/lamenkazu.png"
+              avatarSize={24}
+              borderWidth={1}
+              borderColor="$gray700"
+            />
+          ) : (
+            <View w={24} h={24} />
+          )}
 
           <Tag title={tagTitle} variant={tagVariant} />
         </HStack>
