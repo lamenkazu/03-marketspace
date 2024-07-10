@@ -5,6 +5,8 @@ import { ComponentProps } from 'react'
 
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
+import { useAuth } from '@/hooks/useAuth'
+import { api } from '@/lib/axios'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 interface HeaderProps extends ComponentProps<typeof HStack> {}
@@ -14,6 +16,9 @@ export const Header = ({ ...props }: HeaderProps) => {
   const handleGoToNewAdvert = () => {
     navigate('new')
   }
+
+  const { user } = useAuth()
+
   return (
     <HStack
       gap={10}
@@ -21,11 +26,14 @@ export const Header = ({ ...props }: HeaderProps) => {
       justifyContent="space-between"
       {...props}
     >
-      <Avatar userPhoto="https://github.com/lamenkazu.png" avatarSize={45} />
+      <Avatar
+        userPhoto={`${api.defaults.baseURL}/images/${user.avatar}`}
+        avatarSize={45}
+      />
       <Text flex={1} color={'$gray100'}>
         Boas vindas,{' '}
         <Text color={'$gray100'} fontFamily="$heading">
-          Erick!
+          {user.name}!
         </Text>
       </Text>
       <Button
