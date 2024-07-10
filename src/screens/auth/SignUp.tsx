@@ -80,7 +80,7 @@ export const SignUp = () => {
         return // Se o usuario cancelar a seleção de foto, nada deve ser feito.
       }
 
-      const { fileSize, uri } = selectedPhoto.assets[0]
+      const { fileSize, uri, fileName, mimeType } = selectedPhoto.assets[0]
 
       if (uri && fileSize) {
         const fileSizeInMb = fileSize / 1024 / 1024
@@ -104,8 +104,8 @@ export const SignUp = () => {
 
         setUserPhoto({
           uri,
-          name: '',
-          type: selectedPhoto.assets[0].mimeType!,
+          name: fileName!,
+          type: mimeType!,
         })
       }
 
@@ -120,41 +120,17 @@ export const SignUp = () => {
       console.log(error)
     }
   }
-  const checkIfUserHasImage = () => {
-    if (!userPhoto.uri) {
-      return toast.show({
-        duration: 5000,
-        placement: 'top',
-        render: ({ id }) => {
-          return (
-            <Toast
-              title="É obrigatório o envio de uma imagem."
-              id={id}
-              action="error"
-            />
-          )
-        },
-      })
-    }
-
-    setUserPhoto((prevState) => {
-      const fileExtension = prevState.type.split('/').pop()
-      const { email } = getValues()
-      return { ...prevState, name: `${email}.${fileExtension}`.toLowerCase() }
-    })
-  }
 
   // Form
   const {
     control,
     handleSubmit,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       name: 'Erick',
-      email: '',
+      email: '333@mail.com',
       phone: '31999999999',
       password: 'kkkkkk',
       confirmPassword: 'kkkkkk',
@@ -173,25 +149,24 @@ export const SignUp = () => {
     phone,
     password,
   }: SignUpSchema) => {
-    checkIfUserHasImage()
-
-    const userForm = new FormData()
-
-    const photoFile = {
-      name: userPhoto.name,
-      uri: userPhoto.uri,
-      type: userPhoto.type,
-    } as unknown as Blob
-
-    userForm.append('avatar', photoFile)
-    userForm.append('name', name)
-    userForm.append('email', email)
-    userForm.append('tel', phone)
-    userForm.append('password', password)
-
-    console.log(userForm._parts)
-
+    if (userPhoto.uri === '') {
+      return toast.show({
+        duration: 5000,
+        placement: 'top',
+        render: ({ id }) => {
+          return <Toast title="É obrigatório." id={id} action="error" />
+        },
+      })
+    }
     try {
+      const userForm = new FormData()
+
+      userForm.append('avatar', userPhoto as unknown as Blob)
+      userForm.append('name', name)
+      userForm.append('email', email)
+      userForm.append('tel', phone)
+      userForm.append('password', password)
+
       await api.post('/users', userForm, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -204,8 +179,6 @@ export const SignUp = () => {
       const title = isAppError
         ? error.message
         : 'Não foi possível conectar. Tente novamente.'
-
-      console.log(error)
 
       toast.show({
         duration: 5000,

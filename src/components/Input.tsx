@@ -28,7 +28,7 @@ interface InputProps extends ComponentProps<typeof GluestackInput> {
   keyType?: KeyboardTypeOptions
   onSubmit?: () => void
   returnKeyType?: ReturnKeyTypeOptions
-  value: string
+  value?: string
 }
 
 export const Input = ({
