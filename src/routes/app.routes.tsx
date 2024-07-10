@@ -4,17 +4,17 @@ import {
   createBottomTabNavigator,
 } from '@react-navigation/bottom-tabs'
 import House from 'phosphor-react-native/src/icons/House'
-import SignOut from 'phosphor-react-native/src/icons/SignOut'
+import SignOutIcon from 'phosphor-react-native/src/icons/SignOut'
 import Tag from 'phosphor-react-native/src/icons/Tag'
 
 import { MyAdvertDetails } from '@/screens/app/Details/MyAdvertDetails'
 import { OthersAdvertDetails } from '@/screens/app/Details/OthersAdvertDetails'
 import { PreviewAdvert } from '@/screens/app/Details/PreviewAdvert'
-import { Empty } from '@/screens/app/Empty'
 import { EditAdvert } from '@/screens/app/Form/EditAdvert'
 import { NewAdvert } from '@/screens/app/Form/NewAdvert'
 import { Home } from '@/screens/app/Home'
 import { MyAdverts } from '@/screens/app/MyAdverts'
+import { SignOut } from '@/screens/app/SignOut'
 
 type AppRoutesProps = {
   home: undefined
@@ -122,10 +122,10 @@ export const AppRoutes = () => {
 
       <Screen
         name="sign-out"
-        component={Empty}
+        component={SignOut}
         options={{
           tabBarIcon: ({ focused }) => (
-            <SignOut
+            <SignOutIcon
               style={{ width: 88, height: 88 }}
               color={colors.redlight}
               weight={focused ? 'bold' : 'regular'}

@@ -1,4 +1,4 @@
-import { ScrollView, Text, VStack } from '@gluestack-ui/themed'
+import { ScrollView, Text, useToast, VStack } from '@gluestack-ui/themed'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
@@ -9,7 +9,10 @@ import Logo from '@/assets/logo.svg'
 import Marketspace from '@/assets/marketspace.svg'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
+import { Toast } from '@/components/Toast'
+import { useAuth } from '@/hooks/useAuth'
 import { AuthNavigatorProps } from '@/routes/auth.routes'
+import { AppError } from '@/utils/AppError'
 
 const signInSchema = z.object({
   email: z.string().min(1, 'Informe o e-mail').email('E-mail inválido.'),
@@ -21,6 +24,9 @@ const signInSchema = z.object({
 type SignInSchema = z.infer<typeof signInSchema>
 
 export const SignIn = () => {
+  // Toast
+  const toast = useToast()
+
   // Navigation
   const { navigate } = useNavigation<AuthNavigatorProps>()
   const handleGoToSignUp = () => {
@@ -46,8 +52,25 @@ export const SignIn = () => {
     },
   })
 
-  const handleSignIn = async (data: SignInSchema) => {
-    console.log(data)
+  const { signIn } = useAuth()
+
+  const handleSignIn = async ({ email, password }: SignInSchema) => {
+    try {
+      await signIn(email, password)
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível conectar. Tente novamente.'
+
+      toast.show({
+        duration: 5000,
+        placement: 'top',
+        render: ({ id }) => {
+          return <Toast title={title} id={id} action="error" />
+        },
+      })
+    }
   }
 
   return (
