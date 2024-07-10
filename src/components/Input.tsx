@@ -28,12 +28,14 @@ interface InputProps extends ComponentProps<typeof GluestackInput> {
   keyType?: KeyboardTypeOptions
   onSubmit?: () => void
   returnKeyType?: ReturnKeyTypeOptions
+  value: string
 }
 
 export const Input = ({
   errorMessage = null,
   isInvalid,
   prefix,
+  value,
   placeholder,
   onSubmit,
   onChange,
@@ -78,6 +80,7 @@ export const Input = ({
           onSubmitEditing={onSubmit}
           returnKeyType={returnKeyType}
           fontFamily="$body"
+          value={value}
         />
 
         {isPassword && (

@@ -1,12 +1,4 @@
-import {
-  ScrollView,
-  Text,
-  Toast,
-  ToastDescription,
-  ToastTitle,
-  useToast,
-  VStack,
-} from '@gluestack-ui/themed'
+import { ScrollView, Text, useToast, VStack } from '@gluestack-ui/themed'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation } from '@react-navigation/native'
 import * as ImagePicker from 'expo-image-picker'
@@ -19,9 +11,19 @@ import Logo from '@/assets/logo.svg'
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
+import { Toast } from '@/components/Toast'
+import { useAuth } from '@/hooks/useAuth'
+import { api } from '@/lib/axios'
 import { AuthNavigatorProps } from '@/routes/auth.routes'
+import { AppError } from '@/utils/AppError'
 
 const PHOTO_SIZE = 88
+
+interface UserImageProps {
+  uri: string
+  name: string
+  type: string
+}
 
 const signUpSchema = z
   .object({
@@ -49,6 +51,7 @@ const signUpSchema = z
 type SignUpSchema = z.infer<typeof signUpSchema>
 
 export const SignUp = () => {
+  const { signIn } = useAuth()
   // Toast
   const toast = useToast()
 
@@ -59,7 +62,11 @@ export const SignUp = () => {
   }
 
   // Photo
-  const [userPhoto, setUserPhoto] = useState('')
+  const [userPhoto, setUserPhoto] = useState({
+    uri: '',
+    name: '',
+    type: '',
+  } as UserImageProps)
   const handleSelectUserPhoto = async () => {
     try {
       const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
@@ -83,59 +90,74 @@ export const SignUp = () => {
             duration: 1800,
             placement: 'top',
             render: ({ id }) => {
-              const toastId = 'toast-' + id
               return (
                 <Toast
-                  mt={50}
-                  nativeID={toastId}
-                  action="success"
-                  variant="accent"
-                >
-                  <VStack w={'$72'}>
-                    <ToastTitle>Imagem muito grande!</ToastTitle>
-                    <ToastDescription>Ecolha uma de até 5MB </ToastDescription>
-                  </VStack>
-                </Toast>
+                  title="Imagem muito grande!"
+                  subtitle="Ecolha uma de até 5MB"
+                  id={id}
+                  action="error"
+                />
               )
             },
           })
         }
 
-        setUserPhoto(uri)
+        setUserPhoto({
+          uri,
+          name: '',
+          type: selectedPhoto.assets[0].mimeType!,
+        })
       }
 
       toast.show({
         duration: 1800,
         placement: 'top',
         render: ({ id }) => {
-          const toastId = 'toast-' + id
-          return (
-            <Toast mt={50} nativeID={toastId} action="success" variant="accent">
-              <VStack w={'$72'}>
-                <ToastTitle>Foto atualizada!</ToastTitle>
-              </VStack>
-            </Toast>
-          )
+          return <Toast title="Foto atualizada!" id={id} action="success" />
         },
       })
     } catch (error) {
       console.log(error)
     }
   }
+  const checkIfUserHasImage = () => {
+    if (!userPhoto.uri) {
+      return toast.show({
+        duration: 5000,
+        placement: 'top',
+        render: ({ id }) => {
+          return (
+            <Toast
+              title="É obrigatório o envio de uma imagem."
+              id={id}
+              action="error"
+            />
+          )
+        },
+      })
+    }
+
+    setUserPhoto((prevState) => {
+      const fileExtension = prevState.type.split('/').pop()
+      const { email } = getValues()
+      return { ...prevState, name: `${email}.${fileExtension}`.toLowerCase() }
+    })
+  }
 
   // Form
   const {
     control,
     handleSubmit,
+    getValues,
     formState: { errors, isSubmitting },
   } = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
-      name: '',
+      name: 'Erick',
       email: '',
-      phone: '',
-      password: '',
-      confirmPassword: '',
+      phone: '31999999999',
+      password: 'kkkkkk',
+      confirmPassword: 'kkkkkk',
     },
   })
 
@@ -145,8 +167,54 @@ export const SignUp = () => {
     setIsPasswordVisible(!isPasswordVisible)
   }
 
-  const handleSignUp = async (data: SignUpSchema) => {
-    console.log(data)
+  const handleSignUp = async ({
+    name,
+    email,
+    phone,
+    password,
+  }: SignUpSchema) => {
+    checkIfUserHasImage()
+
+    const userForm = new FormData()
+
+    const photoFile = {
+      name: userPhoto.name,
+      uri: userPhoto.uri,
+      type: userPhoto.type,
+    } as unknown as Blob
+
+    userForm.append('avatar', photoFile)
+    userForm.append('name', name)
+    userForm.append('email', email)
+    userForm.append('tel', phone)
+    userForm.append('password', password)
+
+    console.log(userForm._parts)
+
+    try {
+      await api.post('/users', userForm, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      await signIn(email, password)
+    } catch (error) {
+      const isAppError = error instanceof AppError
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível conectar. Tente novamente.'
+
+      console.log(error)
+
+      toast.show({
+        duration: 5000,
+        placement: 'top',
+        render: ({ id }) => {
+          return <Toast title={title} id={id} action="error" />
+        },
+      })
+    }
   }
 
   return (
@@ -177,7 +245,7 @@ export const SignUp = () => {
         {/* ImagePicker */}
         <Avatar
           mt={32}
-          userPhoto={userPhoto}
+          userPhoto={userPhoto.uri}
           avatarSize={PHOTO_SIZE}
           hasButton
           Icon={PencilSimpleLine}
@@ -189,11 +257,12 @@ export const SignUp = () => {
           <Controller
             control={control}
             name="name"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <Input
                 onChange={onChange}
                 placeholder="Nome"
                 errorMessage={errors.name?.message}
+                value={value}
               />
             )}
           />
@@ -201,8 +270,9 @@ export const SignUp = () => {
           <Controller
             control={control}
             name="email"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <Input
+                value={value}
                 onChange={onChange}
                 keyType="email-address"
                 placeholder="E-mail"
@@ -214,8 +284,9 @@ export const SignUp = () => {
           <Controller
             control={control}
             name="phone"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <Input
+                value={value}
                 onChange={onChange}
                 placeholder="Telefone"
                 keyType="numeric"
@@ -227,8 +298,9 @@ export const SignUp = () => {
           <Controller
             control={control}
             name="password"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <Input
+                value={value}
                 px={0}
                 pl={16}
                 onChange={onChange}
@@ -243,8 +315,9 @@ export const SignUp = () => {
           <Controller
             control={control}
             name="confirmPassword"
-            render={({ field: { onChange } }) => (
+            render={({ field: { onChange, value } }) => (
               <Input
+                value={value}
                 px={0}
                 pl={16}
                 placeholder="Confirmar senha"
