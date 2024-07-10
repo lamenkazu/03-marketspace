@@ -7,6 +7,7 @@ import {
 import { GluestackUIProvider, Spinner } from '@gluestack-ui/themed'
 import { StatusBar } from 'react-native'
 
+import { AuthContextProvider } from '@/contexts/AuthContext'
 import { Routes } from '@/routes'
 import { THEME } from '@/theme'
 
@@ -25,7 +26,9 @@ export default function App() {
       />
 
       {fontsLoaded ? (
-        <Routes />
+        <AuthContextProvider>
+          <Routes />
+        </AuthContextProvider>
       ) : (
         <Spinner bg={'$gray600'} flex={1} color={'$bluelight'} />
       )}

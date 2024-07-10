@@ -1,10 +1,13 @@
-import { Avatar as GluestackAvatar, AvatarImage } from '@gluestack-ui/themed'
+import {
+  Avatar as GluestackAvatar,
+  AvatarImage,
+  Button,
+  ButtonIcon,
+} from '@gluestack-ui/themed'
 import { Icon } from 'phosphor-react-native'
 import { ComponentProps } from 'react'
 
 import DefaultAvatar from '@/assets/avatar.png'
-
-import { Button } from './Button'
 
 interface AvatarProps extends ComponentProps<typeof GluestackAvatar> {
   userPhoto: string
@@ -39,17 +42,17 @@ export const Avatar = ({
       />
       {hasButton && (
         <Button
+          position="relative"
           top={'33%'}
           left={'35%'}
+          borderRadius={'$full'}
           h={40}
           w={40}
-          position="relative"
-          borderRadius={'$full'}
           onPress={onPress}
-          isButtonIcon
-          size={'md'}
-          ButtonIcon={Icon}
-        />
+          bg={'$bluelight'}
+        >
+          <ButtonIcon as={Icon} color={'$gray700'} size="md" h={1} w={1} />
+        </Button>
       )}
     </GluestackAvatar>
   )
