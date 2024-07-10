@@ -1,7 +1,9 @@
 import { Box, Spinner } from '@gluestack-ui/themed'
 import { NavigationContainer } from '@react-navigation/native'
+import { QueryClientProvider } from '@tanstack/react-query'
 
 import { useAuth } from '@/hooks/useAuth'
+import { queryClient } from '@/lib/react-query'
 
 import { AppRoutes } from './app.routes'
 import { AuthRoutes } from './auth.routes'
@@ -16,7 +18,13 @@ export const Routes = () => {
   return (
     <Box flex={1} bg="$gray600">
       <NavigationContainer>
-        {user.id ? <AppRoutes /> : <AuthRoutes />}
+        {user.id ? (
+          <QueryClientProvider client={queryClient}>
+            <AppRoutes />
+          </QueryClientProvider>
+        ) : (
+          <AuthRoutes />
+        )}
       </NavigationContainer>
     </Box>
   )
