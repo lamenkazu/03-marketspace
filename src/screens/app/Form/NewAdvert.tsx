@@ -1,7 +1,13 @@
 import { useStyled, VStack } from '@gluestack-ui/themed'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useNavigation } from '@react-navigation/native'
+import {
+  CommonActions,
+  useFocusEffect,
+  useNavigation,
+} from '@react-navigation/native'
+import { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
+import { BackHandler } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { useAuth } from '@/hooks/useAuth'
@@ -16,10 +22,10 @@ export const NewAdvert = () => {
   const styled = useStyled()
   const { colors } = styled.config.tokens
 
-  const { navigate } = useNavigation<AppNavigationRoutesProp>()
+  const { navigate, dispatch } = useNavigation<AppNavigationRoutesProp>()
 
   const { user } = useAuth()
-  const { handleNewProductInfo } = useMarketspace()
+  const { handleNewProductInfo, handleCleanNewProductInfo } = useMarketspace()
 
   // Form
   const {
@@ -27,19 +33,30 @@ export const NewAdvert = () => {
     handleSubmit,
     setValue,
     trigger,
+    // reset,
     formState: { errors, isSubmitting },
   } = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       productPhotos: [],
-      name: 'teste',
-      description: 'description teste',
+      name: 'kkk',
+      description: 'kkkkkkk',
       isNew: undefined,
       acceptTrade: false,
       price: '33',
       paymentMethods: [],
     },
   })
+
+  const handleCancel = useCallback(() => {
+    dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'my-adverts' }],
+      }),
+    )
+    handleCleanNewProductInfo()
+  }, [dispatch, handleCleanNewProductInfo])
 
   const handlePublishAdvert = ({
     productPhotos,
@@ -65,6 +82,21 @@ export const NewAdvert = () => {
     navigate('preview')
   }
 
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        handleCancel()
+        return true
+      }
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+      }
+    }, [handleCancel]),
+  )
+
   return (
     <SafeAreaView
       style={{
@@ -74,7 +106,7 @@ export const NewAdvert = () => {
       }}
     >
       <VStack flex={1} px={24}>
-        <Header title="Criar anúncio" />
+        <Header title="Criar anúncio" goBack={handleCancel} />
 
         <Form
           control={control}
@@ -86,7 +118,7 @@ export const NewAdvert = () => {
 
       <ActionsButtonGorup
         handleAdvance={handleSubmit(handlePublishAdvert)}
-        handleCancel={() => {}}
+        handleCancel={handleCancel}
         isSubmitting={isSubmitting}
       />
     </SafeAreaView>

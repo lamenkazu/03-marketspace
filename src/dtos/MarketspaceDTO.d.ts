@@ -29,6 +29,7 @@ export interface ProductDTO {
 export interface IMarketspaceContextData {
   newProduct: ProductDTO
   handleNewProductInfo: (data: ProductDTO) => void
+  handleCleanNewProductInfo: () => void
   publishProduct: (data: ProductDTO) => Promise<void>
   fetchProducts: () => Promise<void>
   getProduct: () => Promise<void>

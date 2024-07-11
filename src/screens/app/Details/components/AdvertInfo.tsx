@@ -11,33 +11,33 @@ import {
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
 import Power from 'phosphor-react-native/src/icons/Power'
 import TrashSimple from 'phosphor-react-native/src/icons/TrashSimple'
-import { useState } from 'react'
 
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
 import { LabelTitle } from '@/components/LabelTitle'
 import { PriceLabel } from '@/components/PriceLabel'
 import { Tag } from '@/components/Tag'
+import { ProductDTO } from '@/dtos/MarketspaceDTO'
 
 interface AdvertInfoProps {
   isEdit?: boolean
+  product: ProductDTO
 }
 
-export const AdvertInfo = ({ isEdit = false }: AdvertInfoProps) => {
-  const paymentData = [
-    'Boleto',
-    'Pix',
-    'Dinheiro',
-    'Cartão de Crédito',
-    'Depósito Bancário',
-  ]
-
-  const [isActive, setIsActive] = useState(false)
-
-  const handleToggleActive = () => {
-    setIsActive(!isActive)
-  }
-
+export const AdvertInfo = ({
+  isEdit = false,
+  product: {
+    price,
+    acceptTrade,
+    description,
+    images,
+    isActive,
+    isNew,
+    name,
+    paymentMethods,
+    userId,
+  },
+}: AdvertInfoProps) => {
   return (
     <VStack flex={1}>
       {/* Image */}
@@ -97,36 +97,31 @@ export const AdvertInfo = ({ isEdit = false }: AdvertInfoProps) => {
 
           {/* Tag */}
           <HStack mt={24} mb={14}>
-            <Tag title="Novo" variant="neutral" />
+            <Tag title={isNew ? 'Novo' : 'Usado'} variant="neutral" />
           </HStack>
 
           {/* Advert Title */}
           <HStack justifyContent="space-between">
             <Text flex={1} fontFamily={'$heading'} fontSize={'$xl'}>
-              Bicicleta
+              {name}
             </Text>
 
-            <PriceLabel />
+            <PriceLabel price={price} />
           </HStack>
 
           {/* Advert Description */}
-          <Text mt={18}>
-            Cras congue cursus in tortor sagittis placerat nunc, tellus arcu.
-            Vitae ante leo eget maecenas urna mattis cursus. Mauris metus amet
-            nibh mauris mauris accumsan, euismod. Aenean leo nunc, purus iaculis
-            in aliquam.
-          </Text>
+          <Text mt={18}>{description}</Text>
 
           {/* Advert Trade Info */}
           <HStack alignItems="baseline" gap={12}>
             <LabelTitle>Aceita troca?</LabelTitle>
-            <Text fontSize="$sm">Sim</Text>
+            <Text fontSize="$sm">{acceptTrade ? 'Sim' : 'Não'}</Text>
           </HStack>
 
           {/* Payment Methods */}
           <VStack>
             <LabelTitle mt={14}>Meios de pagamento:</LabelTitle>
-            {paymentData.map((item) => (
+            {paymentMethods.map((item) => (
               <HStack key={item} alignItems="center" gap={12} mb={10}>
                 <Icon as={PencilSimpleLine} size={'md'} h={1} w={1} />
                 <Text fontSize="$sm">{item}</Text>
@@ -140,7 +135,7 @@ export const AdvertInfo = ({ isEdit = false }: AdvertInfoProps) => {
                 title={isActive ? 'Desativar anúncio' : 'Reativar anúncio'}
                 ButtonIcon={Power}
                 bg={isActive ? '$gray100' : '$bluelight'}
-                onPress={handleToggleActive}
+                onPress={() => {}}
               />
               <Button
                 title="Excluir anúncio"

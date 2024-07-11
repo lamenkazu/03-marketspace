@@ -44,6 +44,7 @@ import { z } from 'zod'
 import { Input } from '@/components/Input'
 import { LabelTitle } from '@/components/LabelTitle'
 import { Toast } from '@/components/Toast'
+import { ProductImagesProps } from '@/dtos/MarketspaceDTO'
 
 import { Section } from './Section'
 
@@ -370,10 +371,10 @@ export const Form = ({ control, errors, setValue, trigger }: FormProps) => {
                 render={({ field: { onChange, value = [] } }) => (
                   <Checkbox
                     mb={14}
-                    value="uai"
+                    value={method.value}
                     size="md"
                     aria-label="Checkbox para selecionar meios de pagamento aceitos"
-                    // isChecked={value.includes(method.value)}
+                    isChecked={value.includes(method.value)}
                     onChange={(isSelected) => {
                       if (isSelected) {
                         onChange([...value, method.value])

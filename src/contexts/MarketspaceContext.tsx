@@ -13,6 +13,10 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
     setNewProduct(data)
   }
 
+  const handleCleanNewProductInfo = () => {
+    setNewProduct({} as ProductDTO)
+  }
+
   const publishProduct = async (data: ProductDTO) => {}
 
   const fetchProducts = async () => {}
@@ -28,6 +32,7 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
   const value: IMarketspaceContextData = {
     newProduct,
     handleNewProductInfo,
+    handleCleanNewProductInfo,
     publishProduct,
     fetchProducts,
     getProduct,

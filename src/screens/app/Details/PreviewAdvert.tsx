@@ -7,14 +7,15 @@ import {
   useStyled,
   VStack,
 } from '@gluestack-ui/themed'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import Tag from 'phosphor-react-native/src/icons/Tag'
-import { useCallback, useEffect } from 'react'
-import { StatusBar } from 'react-native'
+import { useCallback } from 'react'
+import { BackHandler, StatusBar } from 'react-native'
 
 import { Button } from '@/components/Button'
 import { useMarketspace } from '@/hooks/useMarketspace'
+import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 import { AdvertInfo } from './components/AdvertInfo'
 
@@ -22,24 +23,36 @@ export const PreviewAdvert = () => {
   const styled = useStyled()
   const { colors } = styled.config.tokens
 
+  const { navigate } = useNavigation<AppNavigationRoutesProp>()
+
   const { newProduct } = useMarketspace()
 
-  useEffect(() => {
-    console.log(newProduct)
-  }, [newProduct])
+  const handleGoBackAndEdit = useCallback(() => {
+    navigate('new')
+  }, [navigate])
 
   useFocusEffect(
     useCallback(() => {
-      // Defina a cor da StatusBar quando a tela estiver em foco
+      // Define a cor da StatusBar quando a tela estiver em foco
       StatusBar.setBarStyle('dark-content')
       StatusBar.setBackgroundColor(colors.bluelight)
 
-      // Restaure a cor da StatusBar quando sair da tela
+      // Define comportamento de voltar do android como o de cancelar do aplicativo
+      const onBackPress = () => {
+        handleGoBackAndEdit()
+        return true
+      }
+      BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
       return () => {
+        // Restaura a cor da StatusBar quando sair da tela
         StatusBar.setBarStyle('dark-content')
         StatusBar.setBackgroundColor(colors.gray600)
+
+        // restaura padrão de comportamento de botão de voltar do android
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress)
       }
-    }, [colors.bluelight, colors.gray600]),
+    }, [colors.bluelight, colors.gray600, handleGoBackAndEdit]),
   )
 
   return (
@@ -62,12 +75,13 @@ export const PreviewAdvert = () => {
         </Center>
 
         {/* Advertising Info */}
-        <AdvertInfo />
+        <AdvertInfo product={newProduct} />
 
         {/* Footer */}
         <Box bg={'$gray700'} h={90} alignItems="center" justifyContent="center">
           <ButtonGroup px={24}>
             <Button
+              onPress={handleGoBackAndEdit}
               ButtonIcon={ArrowLeft}
               title="Voltar e editar"
               bg="$gray500"
