@@ -21,9 +21,24 @@ interface AuthTokenStorageProps {
   refreshToken?: string
 }
 
+interface SignUpData {
+  name: string
+  email: string
+  phone: string
+  password: string
+  userPhoto: Blob
+}
+
+export interface UserImageProps {
+  uri: string
+  name: string
+  type: string
+}
+
 export interface AuthContextDataProps {
   user: UserDTO
   isUserStorageDataLoading: boolean
+  signUp: (data: SignUpData) => Promise<void>
   signIn: (email: string, password: string) => Promise<void>
   signOut: () => Promise<void>
 }
@@ -55,6 +70,28 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
     }
 
     setIsUserStorageDataLoading(false)
+  }
+
+  const signUp = async ({
+    name,
+    email,
+    password,
+    phone,
+    userPhoto,
+  }: SignUpData) => {
+    const userForm = new FormData()
+
+    userForm.append('avatar', userPhoto)
+    userForm.append('name', name)
+    userForm.append('email', email)
+    userForm.append('tel', phone)
+    userForm.append('password', password)
+
+    await api.post('/users', userForm, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
   }
 
   const signIn = async (email: string, password: string) => {
@@ -111,7 +148,7 @@ const AuthContextProvider = ({ children }: PropsWithChildren) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isUserStorageDataLoading, signIn, signOut }}
+      value={{ user, isUserStorageDataLoading, signUp, signIn, signOut }}
     >
       {children}
     </AuthContext.Provider>

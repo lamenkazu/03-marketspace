@@ -1,29 +1,22 @@
 import { ScrollView, Text, useToast, VStack } from '@gluestack-ui/themed'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigation } from '@react-navigation/native'
-import * as ImagePicker from 'expo-image-picker'
-import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
 import { useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 
 import Logo from '@/assets/logo.svg'
-import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { Toast } from '@/components/Toast'
+import { UserImageProps } from '@/contexts/AuthContext'
 import { useAuth } from '@/hooks/useAuth'
-import { api } from '@/lib/axios'
 import { AuthNavigatorProps } from '@/routes/auth.routes'
 import { AppError } from '@/utils/AppError'
 
-const PHOTO_SIZE = 88
+import { UserPhotoSelector } from './components/userPhotoSelector'
 
-interface UserImageProps {
-  uri: string
-  name: string
-  type: string
-}
+const PHOTO_SIZE = 88
 
 const signUpSchema = z
   .object({
@@ -51,9 +44,15 @@ const signUpSchema = z
 type SignUpSchema = z.infer<typeof signUpSchema>
 
 export const SignUp = () => {
-  const { signIn } = useAuth()
+  const { signUp, signIn } = useAuth()
   // Toast
   const toast = useToast()
+
+  // Password Visible
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const handlePasswordVisible = () => {
+    setIsPasswordVisible(!isPasswordVisible)
+  }
 
   // Navigation
   const { navigate } = useNavigation<AuthNavigatorProps>()
@@ -67,59 +66,6 @@ export const SignUp = () => {
     name: '',
     type: '',
   } as UserImageProps)
-  const handleSelectUserPhoto = async () => {
-    try {
-      const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images, // tipo de conteudo que quer selecionar da galeria do usuario
-        quality: 1, // qualidade da imagem vai de 0 a 1
-        aspect: [4, 4], // Aspecto da imagem. No caso, 4 por 4 é uma imagem quadrada, poderia ser 3/4 e dai em diante.
-        allowsEditing: true, // Permite o usuário editar a imagem após selecionar ela.
-      })
-
-      if (selectedPhoto.canceled) {
-        return // Se o usuario cancelar a seleção de foto, nada deve ser feito.
-      }
-
-      const { fileSize, uri, fileName, mimeType } = selectedPhoto.assets[0]
-
-      if (uri && fileSize) {
-        const fileSizeInMb = fileSize / 1024 / 1024
-
-        if (fileSizeInMb > 5) {
-          return toast.show({
-            duration: 1800,
-            placement: 'top',
-            render: ({ id }) => {
-              return (
-                <Toast
-                  title="Imagem muito grande!"
-                  subtitle="Ecolha uma de até 5MB"
-                  id={id}
-                  action="error"
-                />
-              )
-            },
-          })
-        }
-
-        setUserPhoto({
-          uri,
-          name: fileName!,
-          type: mimeType!,
-        })
-      }
-
-      toast.show({
-        duration: 1800,
-        placement: 'top',
-        render: ({ id }) => {
-          return <Toast title="Foto atualizada!" id={id} action="success" />
-        },
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   // Form
   const {
@@ -137,12 +83,6 @@ export const SignUp = () => {
     },
   })
 
-  // Password Visible
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const handlePasswordVisible = () => {
-    setIsPasswordVisible(!isPasswordVisible)
-  }
-
   const handleSignUp = async ({
     name,
     email,
@@ -154,23 +94,24 @@ export const SignUp = () => {
         duration: 5000,
         placement: 'top',
         render: ({ id }) => {
-          return <Toast title="É obrigatório." id={id} action="error" />
+          return (
+            <Toast
+              title="Envio de imagem é obrigatório"
+              id={id}
+              action="error"
+            />
+          )
         },
       })
     }
+
     try {
-      const userForm = new FormData()
-
-      userForm.append('avatar', userPhoto as unknown as Blob)
-      userForm.append('name', name)
-      userForm.append('email', email)
-      userForm.append('tel', phone)
-      userForm.append('password', password)
-
-      await api.post('/users', userForm, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      await signUp({
+        name,
+        email,
+        phone,
+        password,
+        userPhoto: userPhoto as unknown as Blob,
       })
 
       await signIn(email, password)
@@ -216,13 +157,10 @@ export const SignUp = () => {
         </Text>
 
         {/* ImagePicker */}
-        <Avatar
-          mt={32}
-          userPhoto={userPhoto.uri}
-          avatarSize={PHOTO_SIZE}
-          hasButton
-          Icon={PencilSimpleLine}
-          onPress={handleSelectUserPhoto}
+        <UserPhotoSelector
+          PHOTO_SIZE={PHOTO_SIZE}
+          userPhoto={userPhoto}
+          setUserPhoto={setUserPhoto}
         />
 
         {/* Form */}
