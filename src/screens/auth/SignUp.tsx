@@ -262,7 +262,7 @@ export const SignUp = () => {
                 value={value}
                 onChange={onChange}
                 placeholder="Telefone"
-                keyType="numeric"
+                keyType="phone-pad"
                 errorMessage={errors.phone?.message}
               />
             )}

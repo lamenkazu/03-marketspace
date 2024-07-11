@@ -1,18 +1,23 @@
 import { Box, ButtonGroup } from '@gluestack-ui/themed'
-import { useNavigation } from '@react-navigation/native'
 
 import { Button } from '@/components/Button'
-import { AppNavigationRoutesProp } from '@/routes/app.routes'
-export const ActionsButtonGorup = () => {
-  const { navigate } = useNavigation<AppNavigationRoutesProp>()
-  const handleAdvance = () => {
-    navigate('preview')
-  }
 
+interface ActionsButtonGorupProps {
+  handleCancel: () => void
+  handleAdvance: () => void
+  isSubmitting: boolean
+}
+
+export const ActionsButtonGorup = ({
+  handleCancel,
+  handleAdvance,
+  isSubmitting,
+}: ActionsButtonGorupProps) => {
   return (
     <Box bg={'$gray700'} h={90} alignItems="center" justifyContent="center">
       <ButtonGroup px={24}>
         <Button
+          onPress={handleCancel}
           title="Cancelar"
           bg="$gray500"
           color={'$gray200'}
@@ -25,6 +30,7 @@ export const ActionsButtonGorup = () => {
           title="Avançar"
           w={'50%'}
           px={0}
+          isLoading={isSubmitting}
         />
       </ButtonGroup>
     </Box>
