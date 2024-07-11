@@ -31,7 +31,8 @@ export interface IMarketspaceContextData {
   handleNewProductInfo: (data: ProductDTO) => void
   handleCleanNewProductInfo: () => void
   publishProduct: (data: ProductDTO) => Promise<void>
-  fetchProducts: () => Promise<void>
+  fetchProducts: () => Promise<ProductDTO[]>
+  fetchOwnProducts: () => Promise<ProductDTO[]>
   getProduct: () => Promise<void>
   updateProduct: () => Promise<void>
   toggleVisibility: () => Promise<void>

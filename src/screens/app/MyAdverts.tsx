@@ -16,13 +16,15 @@ import {
   View,
   VStack,
 } from '@gluestack-ui/themed'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import Plus from 'phosphor-react-native/src/icons/Plus'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 import { AdvertList } from '@/components/AdvertList'
+import { ProductDTO } from '@/dtos/MarketspaceDTO'
+import { useMarketspace } from '@/hooks/useMarketspace'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 export const MyAdverts = () => {
@@ -39,6 +41,21 @@ export const MyAdverts = () => {
 
   const styled = useStyled()
   const { colors } = styled.config.tokens
+
+  const { fetchOwnProducts } = useMarketspace()
+
+  const [productList, setProductList] = useState<ProductDTO[]>([])
+
+  useFocusEffect(
+    useCallback(() => {
+      const getActualUserProducts = async () => {
+        const ownProductsData = await fetchOwnProducts()
+        setProductList(ownProductsData)
+      }
+
+      getActualUserProducts()
+    }, [fetchOwnProducts]),
+  )
 
   return (
     <SafeAreaView
@@ -64,7 +81,7 @@ export const MyAdverts = () => {
 
         {/*  */}
         <HStack justifyContent="space-between" alignItems="center" mb={20}>
-          <Text fontSize="$sm">9 anúncios</Text>
+          <Text fontSize="$sm">{productList.length} anúncios</Text>
 
           <Select
             w={120}
@@ -95,7 +112,7 @@ export const MyAdverts = () => {
           </Select>
         </HStack>
 
-        <AdvertList condition="self" />
+        <AdvertList condition="self" list={productList} />
       </VStack>
     </SafeAreaView>
   )

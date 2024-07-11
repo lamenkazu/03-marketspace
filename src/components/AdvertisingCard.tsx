@@ -3,23 +3,21 @@ import { useNavigation } from '@react-navigation/native'
 import { ComponentProps } from 'react'
 import { TouchableOpacity } from 'react-native'
 
+import { ProductDTO } from '@/dtos/MarketspaceDTO'
+import { api } from '@/lib/axios'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 import { Avatar } from './Avatar'
-import { Tag, TagTitleVariants, TagVariants } from './Tag'
+import { Tag } from './Tag'
 
 interface AdvertisingCardProps extends ComponentProps<typeof VStack> {
-  tagVariant: TagVariants
-  tagTitle: TagTitleVariants
+  data: ProductDTO
   isSelfAdvert: boolean
-  isActive?: boolean
 }
 
 export const AdvertisingCard = ({
-  tagVariant,
-  tagTitle,
-  isSelfAdvert = false,
-  isActive = true,
+  data,
+  isSelfAdvert,
   ...props
 }: AdvertisingCardProps) => {
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
@@ -55,7 +53,10 @@ export const AdvertisingCard = ({
             <View w={24} h={24} />
           )}
 
-          <Tag title={tagTitle} variant={tagVariant} />
+          <Tag
+            title={data.isNew ? 'Novo' : 'Usado'}
+            variant={data.isNew ? 'new' : 'used'}
+          />
         </HStack>
 
         <HStack>
@@ -63,14 +64,14 @@ export const AdvertisingCard = ({
             w={'$full'}
             h={100}
             source={{
-              uri: 'https://cdn.awsli.com.br/600x1000/1392/1392737/produto/188276783/d93e5dc2bc.jpg',
+              uri: `${api.defaults.baseURL}/images/${data.images[0].uri}`,
             }}
             alt="imagem do produto"
             borderRadius={6}
             position={'relative'}
           />
 
-          {!isActive ? (
+          {data.isActive !== undefined && !data.isActive ? (
             <>
               <View
                 bg={'$gray100'}
@@ -100,7 +101,7 @@ export const AdvertisingCard = ({
 
         <VStack ml={3} mt={8}>
           <Text $base-color="$gray200" fontSize={'$sm'}>
-            Tênis{' '}
+            {data.name}
           </Text>
 
           <HStack alignItems="baseline" gap={3}>
@@ -109,7 +110,10 @@ export const AdvertisingCard = ({
             </Text>
 
             <Text $base-color="$gray100" fontSize={'$md'} fontFamily="$heading">
-              59,90
+              {new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+              }).format(data.price / 100)}
             </Text>
           </HStack>
         </VStack>

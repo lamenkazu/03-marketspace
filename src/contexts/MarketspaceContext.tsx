@@ -1,6 +1,7 @@
 import { createContext, PropsWithChildren, useState } from 'react'
 
 import { api } from '@/lib/axios'
+import { mapProductList } from '@/utils/MapProductData'
 
 import { IMarketspaceContextData, ProductDTO } from '../dtos/MarketspaceDTO'
 
@@ -24,7 +25,7 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
       name: data.name,
       description: data.description,
       is_new: data.isNew,
-      price: data.price,
+      price: data.price * 100,
       accept_trade: data.acceptTrade,
       payment_methods: data.paymentMethods,
     }
@@ -44,7 +45,25 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
     })
   }
 
-  const fetchProducts = async () => {}
+  const fetchProducts = async () => {
+    const { data } = await api.get('/products')
+
+    console.log(data)
+
+    // Converte os dados recebidos para o formato camelCase
+    const mappedData = mapProductList(data)
+
+    return mappedData
+  }
+
+  const fetchOwnProducts = async () => {
+    const { data } = await api.get('/users/products')
+
+    // Converte os dados recebidos para o formato camelCase
+    const mappedData = mapProductList(data)
+
+    return mappedData
+  }
 
   const getProduct = async () => {}
 
@@ -60,6 +79,7 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
     handleCleanNewProductInfo,
     publishProduct,
     fetchProducts,
+    fetchOwnProducts,
     getProduct,
     updateProduct,
     toggleVisibility,
