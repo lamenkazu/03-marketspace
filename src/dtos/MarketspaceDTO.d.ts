@@ -12,7 +12,7 @@ export interface ProductImagesDTO {
 
 export interface ProductDTO {
   id?: string
-  userId: string
+  userId?: string
 
   images: ProductImagesProps
   isActive: boolean

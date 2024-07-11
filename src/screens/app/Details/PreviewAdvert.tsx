@@ -14,6 +14,7 @@ import { useCallback } from 'react'
 import { BackHandler, StatusBar } from 'react-native'
 
 import { Button } from '@/components/Button'
+import { useAuth } from '@/hooks/useAuth'
 import { useMarketspace } from '@/hooks/useMarketspace'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
@@ -25,11 +26,21 @@ export const PreviewAdvert = () => {
 
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
 
-  const { newProduct } = useMarketspace()
+  const { user } = useAuth()
+  const { newProduct, publishProduct } = useMarketspace()
 
   const handleGoBackAndEdit = useCallback(() => {
     navigate('new')
   }, [navigate])
+
+  const handlePublishment = async () => {
+    await publishProduct({
+      ...newProduct,
+      userId: user.id,
+    })
+
+    navigate('my-adverts')
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -37,6 +48,15 @@ export const PreviewAdvert = () => {
       StatusBar.setBarStyle('dark-content')
       StatusBar.setBackgroundColor(colors.bluelight)
 
+      return () => {
+        // Restaura a cor da StatusBar quando sair da tela
+        StatusBar.setBarStyle('dark-content')
+        StatusBar.setBackgroundColor(colors.gray600)
+      }
+    }, [colors.bluelight, colors.gray600]),
+  )
+  useFocusEffect(
+    useCallback(() => {
       // Define comportamento de voltar do android como o de cancelar do aplicativo
       const onBackPress = () => {
         handleGoBackAndEdit()
@@ -45,14 +65,10 @@ export const PreviewAdvert = () => {
       BackHandler.addEventListener('hardwareBackPress', onBackPress)
 
       return () => {
-        // Restaura a cor da StatusBar quando sair da tela
-        StatusBar.setBarStyle('dark-content')
-        StatusBar.setBackgroundColor(colors.gray600)
-
         // restaura padrão de comportamento de botão de voltar do android
         BackHandler.removeEventListener('hardwareBackPress', onBackPress)
       }
-    }, [colors.bluelight, colors.gray600, handleGoBackAndEdit]),
+    }, [handleGoBackAndEdit]),
   )
 
   return (
@@ -89,7 +105,13 @@ export const PreviewAdvert = () => {
               w={'50%'}
               px={0}
             />
-            <Button ButtonIcon={Tag} title="Publicar" w={'50%'} px={0} />
+            <Button
+              onPress={handlePublishment}
+              ButtonIcon={Tag}
+              title="Publicar"
+              w={'50%'}
+              px={0}
+            />
           </ButtonGroup>
         </Box>
       </VStack>

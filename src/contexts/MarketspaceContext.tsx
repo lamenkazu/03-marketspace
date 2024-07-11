@@ -1,5 +1,7 @@
 import { createContext, PropsWithChildren, useState } from 'react'
 
+import { api } from '@/lib/axios'
+
 import { IMarketspaceContextData, ProductDTO } from '../dtos/MarketspaceDTO'
 
 const MarketspaceContext = createContext<IMarketspaceContextData>(
@@ -17,7 +19,30 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
     setNewProduct({} as ProductDTO)
   }
 
-  const publishProduct = async (data: ProductDTO) => {}
+  const publishProduct = async (data: ProductDTO) => {
+    const newProduct = {
+      name: data.name,
+      description: data.description,
+      is_new: data.isNew,
+      price: data.price,
+      accept_trade: data.acceptTrade,
+      payment_methods: data.paymentMethods,
+    }
+
+    const { data: result } = await api.post('/products', newProduct)
+
+    const imageData = new FormData()
+    data.images.forEach((image) => {
+      imageData.append('images', image as unknown as Blob)
+    })
+    imageData.append('product_id', result.id)
+
+    await api.post('/products/images', imageData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  }
 
   const fetchProducts = async () => {}
 

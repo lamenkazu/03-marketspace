@@ -10,7 +10,6 @@ import { useForm } from 'react-hook-form'
 import { BackHandler } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
-import { useAuth } from '@/hooks/useAuth'
 import { useMarketspace } from '@/hooks/useMarketspace'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
@@ -24,7 +23,6 @@ export const NewAdvert = () => {
 
   const { navigate, dispatch } = useNavigation<AppNavigationRoutesProp>()
 
-  const { user } = useAuth()
   const { handleNewProductInfo, handleCleanNewProductInfo } = useMarketspace()
 
   // Form
@@ -68,7 +66,6 @@ export const NewAdvert = () => {
     paymentMethods,
   }: FormSchema) => {
     handleNewProductInfo({
-      userId: user.id,
       images: productPhotos,
       isActive: true,
       name,

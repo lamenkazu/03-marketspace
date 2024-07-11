@@ -18,6 +18,8 @@ import { LabelTitle } from '@/components/LabelTitle'
 import { PriceLabel } from '@/components/PriceLabel'
 import { Tag } from '@/components/Tag'
 import { ProductDTO } from '@/dtos/MarketspaceDTO'
+import { useAuth } from '@/hooks/useAuth'
+import { api } from '@/lib/axios'
 
 interface AdvertInfoProps {
   isEdit?: boolean
@@ -35,9 +37,10 @@ export const AdvertInfo = ({
     isNew,
     name,
     paymentMethods,
-    userId,
   },
 }: AdvertInfoProps) => {
+  const { user } = useAuth()
+
   return (
     <VStack flex={1}>
       {/* Image */}
@@ -46,7 +49,7 @@ export const AdvertInfo = ({
           w={'$full'}
           h={280}
           source={{
-            uri: 'https://cdn.awsli.com.br/600x1000/1392/1392737/produto/188276783/d93e5dc2bc.jpg',
+            uri: images[0].uri,
           }}
           alt="imagem do produto"
           position={'relative'}
@@ -86,12 +89,12 @@ export const AdvertInfo = ({
           {/* Profile */}
           <HStack gap={8}>
             <Avatar
-              userPhoto="https://github.com/lamenkazu.png"
+              userPhoto={`${api.defaults.baseURL}/images/${user.avatar}`}
               avatarSize={24}
               borderWidth={1}
             />
             <Text fontSize={'$sm'} color={'$gray100'}>
-              Erick Etiene
+              {user.name}
             </Text>
           </HStack>
 
