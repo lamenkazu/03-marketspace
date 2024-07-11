@@ -3,6 +3,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { useMarketspace } from '@/hooks/useMarketspace'
+
 import { ActionsButtonGorup } from './components/ActionsButtonGroup'
 import { Form, FormSchema, formSchema } from './components/Form'
 import { Header } from './components/Header'
@@ -10,6 +12,8 @@ import { Header } from './components/Header'
 export const NewAdvert = () => {
   const styled = useStyled()
   const { colors } = styled.config.tokens
+
+  const { publishProduct } = useMarketspace()
 
   // Form
   const {
