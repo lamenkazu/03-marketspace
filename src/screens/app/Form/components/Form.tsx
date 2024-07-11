@@ -47,12 +47,6 @@ import { Toast } from '@/components/Toast'
 
 import { Section } from './Section'
 
-type ProductImagesProps = {
-  uri: string
-  name: string
-  type: string
-}[]
-
 export const formSchema = z.object({
   name: z.string().min(1, 'Nome obrigatório').min(3, 'Nome muito curto.'),
   description: z

@@ -1,9 +1,12 @@
 import { useStyled, VStack } from '@gluestack-ui/themed'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigation } from '@react-navigation/native'
 import { useForm } from 'react-hook-form'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { useAuth } from '@/hooks/useAuth'
 import { useMarketspace } from '@/hooks/useMarketspace'
+import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 import { ActionsButtonGorup } from './components/ActionsButtonGroup'
 import { Form, FormSchema, formSchema } from './components/Form'
@@ -13,7 +16,10 @@ export const NewAdvert = () => {
   const styled = useStyled()
   const { colors } = styled.config.tokens
 
-  const { publishProduct } = useMarketspace()
+  const { navigate } = useNavigation<AppNavigationRoutesProp>()
+
+  const { user } = useAuth()
+  const { handleNewProductInfo } = useMarketspace()
 
   // Form
   const {
@@ -26,17 +32,37 @@ export const NewAdvert = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       productPhotos: [],
-      name: '',
-      description: '',
+      name: 'teste',
+      description: 'description teste',
       isNew: undefined,
       acceptTrade: false,
-      price: '',
+      price: '33',
       paymentMethods: [],
     },
   })
 
-  const handleCreate = (data: FormSchema) => {
-    console.log(data)
+  const handlePublishAdvert = ({
+    productPhotos,
+    name,
+    description,
+    isNew,
+    price,
+    acceptTrade,
+    paymentMethods,
+  }: FormSchema) => {
+    handleNewProductInfo({
+      userId: user.id,
+      images: productPhotos,
+      isActive: true,
+      name,
+      description,
+      isNew,
+      price: Number(price),
+      acceptTrade,
+      paymentMethods,
+    })
+
+    navigate('preview')
   }
 
   return (
@@ -59,7 +85,7 @@ export const NewAdvert = () => {
       </VStack>
 
       <ActionsButtonGorup
-        handleAdvance={handleSubmit(handleCreate)}
+        handleAdvance={handleSubmit(handlePublishAdvert)}
         handleCancel={() => {}}
         isSubmitting={isSubmitting}
       />

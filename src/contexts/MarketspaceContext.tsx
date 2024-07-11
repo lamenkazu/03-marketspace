@@ -1,20 +1,19 @@
-import { createContext, PropsWithChildren } from 'react'
+import { createContext, PropsWithChildren, useState } from 'react'
 
-export interface MarketspaceContextDataProps {
-  publishProduct: () => Promise<void>
-  fetchProducts: () => Promise<void>
-  getProduct: () => Promise<void>
-  updateProduct: () => Promise<void>
-  toggleVisibility: () => Promise<void>
-  deleteProduct: () => Promise<void>
-}
+import { IMarketspaceContextData, ProductDTO } from '../dtos/MarketspaceDTO'
 
-const MarketspaceContext = createContext<MarketspaceContextDataProps>(
-  {} as MarketspaceContextDataProps,
+const MarketspaceContext = createContext<IMarketspaceContextData>(
+  {} as IMarketspaceContextData,
 )
 
 const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
-  const publishProduct = async () => {}
+  const [newProduct, setNewProduct] = useState<ProductDTO>({} as ProductDTO)
+
+  const handleNewProductInfo = (data: ProductDTO) => {
+    setNewProduct(data)
+  }
+
+  const publishProduct = async (data: ProductDTO) => {}
 
   const fetchProducts = async () => {}
 
@@ -26,17 +25,19 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
 
   const deleteProduct = async () => {}
 
+  const value: IMarketspaceContextData = {
+    newProduct,
+    handleNewProductInfo,
+    publishProduct,
+    fetchProducts,
+    getProduct,
+    updateProduct,
+    toggleVisibility,
+    deleteProduct,
+  }
+
   return (
-    <MarketspaceContext.Provider
-      value={{
-        publishProduct,
-        fetchProducts,
-        getProduct,
-        updateProduct,
-        toggleVisibility,
-        deleteProduct,
-      }}
-    >
+    <MarketspaceContext.Provider value={value}>
       {children}
     </MarketspaceContext.Provider>
   )

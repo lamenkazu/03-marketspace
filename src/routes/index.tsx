@@ -2,6 +2,7 @@ import { Box, Spinner } from '@gluestack-ui/themed'
 import { NavigationContainer } from '@react-navigation/native'
 import { QueryClientProvider } from '@tanstack/react-query'
 
+import { MarketspaceContextProvider } from '@/contexts/MarketspaceContext'
 import { useAuth } from '@/hooks/useAuth'
 import { queryClient } from '@/lib/react-query'
 
@@ -20,7 +21,9 @@ export const Routes = () => {
       <NavigationContainer>
         {user.id ? (
           <QueryClientProvider client={queryClient}>
-            <AppRoutes />
+            <MarketspaceContextProvider>
+              <AppRoutes />
+            </MarketspaceContextProvider>
           </QueryClientProvider>
         ) : (
           <AuthRoutes />

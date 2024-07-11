@@ -10,16 +10,23 @@ import {
 import { useFocusEffect } from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import Tag from 'phosphor-react-native/src/icons/Tag'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { StatusBar } from 'react-native'
 
 import { Button } from '@/components/Button'
+import { useMarketspace } from '@/hooks/useMarketspace'
 
 import { AdvertInfo } from './components/AdvertInfo'
 
 export const PreviewAdvert = () => {
   const styled = useStyled()
   const { colors } = styled.config.tokens
+
+  const { newProduct } = useMarketspace()
+
+  useEffect(() => {
+    console.log(newProduct)
+  }, [newProduct])
 
   useFocusEffect(
     useCallback(() => {
