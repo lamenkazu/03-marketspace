@@ -44,7 +44,7 @@ export const AdvertisingCard = ({
         >
           {!isSelfAdvert ? (
             <Avatar
-              userPhoto="https://github.com/lamenkazu.png"
+              userPhoto={`${api.defaults.baseURL}/images/${data.user?.avatar}`}
               avatarSize={24}
               borderWidth={1}
               borderColor="$gray700"

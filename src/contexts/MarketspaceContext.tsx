@@ -48,8 +48,6 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
   const fetchProducts = async () => {
     const { data } = await api.get('/products')
 
-    console.log(data)
-
     // Converte os dados recebidos para o formato camelCase
     const mappedData = mapProductList(data)
 

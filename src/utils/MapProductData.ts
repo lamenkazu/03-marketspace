@@ -24,6 +24,11 @@ const mapProductData = (product: any): ProductDTO => {
   return {
     id: product.id,
     userId: product.user_id,
+    user: product.user
+      ? {
+          avatar: product.user.avatar,
+        }
+      : undefined,
     images: mapImages(product.product_images), // Converte as imagens
     isActive: product.is_active,
     name: product.name,

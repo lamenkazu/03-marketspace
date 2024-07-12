@@ -13,6 +13,9 @@ export interface ProductImagesDTO {
 export interface ProductDTO {
   id?: string
   userId?: string
+  user?: {
+    avatar: string
+  }
 
   images: ProductImagesProps
   isActive: boolean
