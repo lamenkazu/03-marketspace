@@ -4,13 +4,16 @@ import {
   Icon,
   Image,
   ScrollView,
+  Spinner,
   Text,
   View,
   VStack,
 } from '@gluestack-ui/themed'
+import { useNavigation } from '@react-navigation/native'
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
 import Power from 'phosphor-react-native/src/icons/Power'
 import TrashSimple from 'phosphor-react-native/src/icons/TrashSimple'
+import { Alert } from 'react-native'
 
 import { Avatar } from '@/components/Avatar'
 import { Button } from '@/components/Button'
@@ -19,16 +22,26 @@ import { PriceLabel } from '@/components/PriceLabel'
 import { Tag } from '@/components/Tag'
 import { ProductDTO } from '@/dtos/MarketspaceDTO'
 import { useAuth } from '@/hooks/useAuth'
+import { useMarketspace } from '@/hooks/useMarketspace'
 import { api } from '@/lib/axios'
+import { AppNavigationRoutesProp } from '@/routes/app.routes'
 
 interface AdvertInfoProps {
   isEdit?: boolean
+  isPreview?: boolean
   product: ProductDTO
+  isLoading?: boolean
+  setIsActive?: (visible: boolean) => void // Adicione esta prop
 }
 
 export const AdvertInfo = ({
   isEdit = false,
-  product: {
+  isPreview = false,
+  isLoading,
+  product,
+  setIsActive,
+}: AdvertInfoProps) => {
+  const {
     price,
     acceptTrade,
     description,
@@ -37,9 +50,45 @@ export const AdvertInfo = ({
     isNew,
     name,
     paymentMethods,
-  },
-}: AdvertInfoProps) => {
-  const { user } = useAuth()
+    user,
+    id,
+  } = product
+
+  const { user: loggedUser } = useAuth()
+  const { deleteProduct, toggleVisibility } = useMarketspace()
+
+  const { navigate } = useNavigation<AppNavigationRoutesProp>()
+
+  const handleDelete = () => {
+    Alert.alert(
+      'Deletar anúncio?',
+      'Esse anúncio será excluído permanentemente.',
+      [
+        {
+          text: 'Não excluir',
+          style: 'cancel',
+        },
+        {
+          text: 'Excluir pra sempre',
+          onPress: async () => {
+            await deleteProduct(product)
+            navigate('my-adverts')
+          },
+        },
+      ],
+    )
+  }
+
+  const handleChangeVisibility = async () => {
+    await toggleVisibility(id!, !isActive)
+    if (setIsActive) {
+      setIsActive(!isActive)
+    }
+  }
+
+  if (isLoading) {
+    return <Spinner flex={1} />
+  }
 
   return (
     <VStack flex={1}>
@@ -48,9 +97,15 @@ export const AdvertInfo = ({
         <Image
           w={'$full'}
           h={280}
-          source={{
-            uri: images[0].uri,
-          }}
+          source={
+            isPreview
+              ? {
+                  uri: images[0].uri,
+                }
+              : {
+                  uri: `${api.defaults.baseURL}/images/${images[0].uri}`,
+                }
+          }
           alt="imagem do produto"
           position={'relative'}
         />
@@ -89,12 +144,16 @@ export const AdvertInfo = ({
           {/* Profile */}
           <HStack gap={8}>
             <Avatar
-              userPhoto={`${api.defaults.baseURL}/images/${user.avatar}`}
+              userPhoto={
+                isPreview
+                  ? `${api.defaults.baseURL}/images/${loggedUser.avatar}`
+                  : `${api.defaults.baseURL}/images/${user?.avatar}`
+              }
               avatarSize={24}
               borderWidth={1}
             />
             <Text fontSize={'$sm'} color={'$gray100'}>
-              {user.name}
+              {isPreview ? loggedUser.name : user?.name}
             </Text>
           </HStack>
 
@@ -125,9 +184,9 @@ export const AdvertInfo = ({
           <VStack>
             <LabelTitle mt={14}>Meios de pagamento:</LabelTitle>
             {paymentMethods.map((item) => (
-              <HStack key={item} alignItems="center" gap={12} mb={10}>
+              <HStack key={item.key} alignItems="center" gap={12} mb={10}>
                 <Icon as={PencilSimpleLine} size={'md'} h={1} w={1} />
-                <Text fontSize="$sm">{item}</Text>
+                <Text fontSize="$sm">{item.name}</Text>
               </HStack>
             ))}
           </VStack>
@@ -138,13 +197,14 @@ export const AdvertInfo = ({
                 title={isActive ? 'Desativar anúncio' : 'Reativar anúncio'}
                 ButtonIcon={Power}
                 bg={isActive ? '$gray100' : '$bluelight'}
-                onPress={() => {}}
+                onPress={handleChangeVisibility}
               />
               <Button
                 title="Excluir anúncio"
                 ButtonIcon={TrashSimple}
                 bg={'$gray500'}
                 color={'$gray200'}
+                onPress={handleDelete}
               />
             </ButtonGroup>
           ) : null}

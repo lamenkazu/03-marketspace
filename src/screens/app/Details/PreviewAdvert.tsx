@@ -91,7 +91,7 @@ export const PreviewAdvert = () => {
         </Center>
 
         {/* Advertising Info */}
-        <AdvertInfo product={newProduct} />
+        <AdvertInfo product={newProduct} isPreview />
 
         {/* Footer */}
         <Box bg={'$gray700'} h={90} alignItems="center" justifyContent="center">

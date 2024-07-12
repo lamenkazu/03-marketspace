@@ -1,21 +1,65 @@
 import { HStack, Icon, useStyled, VStack } from '@gluestack-ui/themed'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
 import ArrowLeft from 'phosphor-react-native/src/icons/ArrowLeft'
 import PencilSimpleLine from 'phosphor-react-native/src/icons/PencilSimpleLine'
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { BackHandler, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
+import { ProductDTO } from '@/dtos/MarketspaceDTO'
+import { useMarketspace } from '@/hooks/useMarketspace'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
 import { AdvertInfo } from '@/screens/app/Details/components/AdvertInfo'
 
-export const MyAdvertDetails = () => {
-  const { navigate } = useNavigation<AppNavigationRoutesProp>()
+export const EMPTY_DATA = {
+  acceptTrade: true,
+  images: [{ uri: 'https://github.com/lamenkazu.png', name: '', type: '' }],
+  isNew: false,
+  name: '',
+  paymentMethods: [],
+  description: '',
+  isActive: true,
+  price: 0,
+  id: '',
+  userId: '',
+} as ProductDTO
 
+interface RouteParams {
+  id: string
+}
+
+export const MyAdvertDetails = () => {
+  // Parameters
+  const { params } = useRoute()
+  const { id } = params as RouteParams
+
+  // Data
+  const [isLoading, setIsLoading] = useState(true)
+  const [productData, setProductData] = useState<ProductDTO>(EMPTY_DATA)
+  const { getProduct } = useMarketspace()
+
+  const [isActive, setIsActive] = useState(productData.isActive)
+
+  useEffect(() => {
+    setIsLoading(true)
+    const fetchProductData = async () => {
+      const data = await getProduct(id)
+      setProductData(data)
+      setIsLoading(false)
+    }
+
+    fetchProductData()
+  }, [getProduct, id, isActive])
+
+  // Navigation
+  const { navigate } = useNavigation<AppNavigationRoutesProp>()
   const goToEdit = () => {
     navigate('edit', { id: '1' })
   }
-
   const returnToMyAdverts = useCallback(() => {
     navigate('my-adverts')
   }, [navigate])
@@ -35,6 +79,7 @@ export const MyAdvertDetails = () => {
     }, [returnToMyAdverts]),
   )
 
+  // Styles
   const styled = useStyled()
   const { colors } = styled.config.tokens
 
@@ -59,7 +104,12 @@ export const MyAdvertDetails = () => {
         </HStack>
 
         {/* Advertising Info */}
-        <AdvertInfo isEdit />
+        <AdvertInfo
+          isEdit
+          product={productData}
+          isLoading={isLoading}
+          setIsActive={setIsActive}
+        />
       </VStack>
     </SafeAreaView>
   )

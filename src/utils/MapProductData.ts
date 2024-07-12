@@ -12,7 +12,7 @@ const convertToCamelCase = (obj: any) => {
 }
 
 // Função para converter um produto específico
-const mapProductData = (product: any): ProductDTO => {
+export const mapProductData = (product: any): ProductDTO => {
   const mapImages = (images: ProductImagesDTO[]): ProductImagesProps => {
     return images.map((image) => ({
       uri: image.path,
@@ -27,6 +27,8 @@ const mapProductData = (product: any): ProductDTO => {
     user: product.user
       ? {
           avatar: product.user.avatar,
+          name: product.user.name,
+          phone: product.user.tel,
         }
       : undefined,
     images: mapImages(product.product_images), // Converte as imagens

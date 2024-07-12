@@ -69,7 +69,12 @@ export const formSchema = z.object({
     ),
   acceptTrade: z.boolean(),
   paymentMethods: z
-    .array(z.string())
+    .array(
+      z.object({
+        key: z.string(),
+        name: z.string(),
+      }),
+    )
     .min(1, 'Selecione ao menos um meio de pagamento.'),
   productPhotos: z
     .array(z.object({ uri: z.string(), name: z.string(), type: z.string() }))
@@ -88,11 +93,11 @@ export const Form = ({ control, errors, setValue, trigger }: FormProps) => {
   const toast = useToast()
 
   const paymentData = [
-    { label: 'Boleto', value: 'boleto' },
-    { label: 'Pix', value: 'pix' },
-    { label: 'Dinheiro', value: 'cash' },
-    { label: 'Cartão de Crédito', value: 'card' },
-    { label: 'Depósito Bancário', value: 'deposit' },
+    { name: 'Boleto', key: 'boleto' },
+    { name: 'Pix', key: 'pix' },
+    { name: 'Dinheiro', key: 'cash' },
+    { name: 'Cartão de Crédito', key: 'card' },
+    { name: 'Depósito Bancário', key: 'deposit' },
   ]
 
   // Images
@@ -365,44 +370,55 @@ export const Form = ({ control, errors, setValue, trigger }: FormProps) => {
             <LabelTitle mt={16}>Meios de pagamento aceitos</LabelTitle>
             {paymentData.map((method) => (
               <Controller
-                key={method.value}
+                key={method.key}
                 control={control}
                 name="paymentMethods"
-                render={({ field: { onChange, value = [] } }) => (
-                  <Checkbox
-                    mb={14}
-                    value={method.value}
-                    size="md"
-                    aria-label="Checkbox para selecionar meios de pagamento aceitos"
-                    isChecked={value.includes(method.value)}
-                    onChange={(isSelected) => {
-                      if (isSelected) {
-                        onChange([...value, method.value])
-                      } else {
-                        onChange(value.filter((v) => v !== method.value))
-                      }
-                    }}
-                  >
-                    <CheckboxIndicator
-                      h={18}
-                      w={18}
-                      mr="$2"
-                      $checked-borderWidth={0}
-                      $checked-bg="$bluelight"
+                render={({ field: { onChange, value = [] } }) => {
+                  const isChecked = value.some(
+                    (item) => item.key === method.key,
+                  )
+
+                  return (
+                    <Checkbox
+                      mb={14}
+                      value={method.key}
+                      size="md"
+                      aria-label="Checkbox para selecionar meios de pagamento aceitos"
+                      isChecked={isChecked}
+                      onChange={(isSelected) => {
+                        if (isSelected) {
+                          onChange([
+                            ...value,
+                            { key: method.key, name: method.name },
+                          ])
+                        } else {
+                          onChange(
+                            value.filter((item) => item.key !== method.key),
+                          )
+                        }
+                      }}
                     >
-                      <CheckboxIcon
-                        as={CheckIcon}
-                        color={'$gray700'}
-                        size="2xs"
-                        h={13}
-                        w={13}
-                      />
-                    </CheckboxIndicator>
-                    <CheckboxLabel fontFamily="$body" fontSize={'$md'}>
-                      {method.label}
-                    </CheckboxLabel>
-                  </Checkbox>
-                )}
+                      <CheckboxIndicator
+                        h={18}
+                        w={18}
+                        mr="$2"
+                        $checked-borderWidth={0}
+                        $checked-bg="$bluelight"
+                      >
+                        <CheckboxIcon
+                          as={CheckIcon}
+                          color={'$gray700'}
+                          size="2xs"
+                          h={13}
+                          w={13}
+                        />
+                      </CheckboxIndicator>
+                      <CheckboxLabel fontFamily="$body" fontSize={'$md'}>
+                        {method.name}
+                      </CheckboxLabel>
+                    </Checkbox>
+                  )
+                }}
               />
             ))}
             <FormControlError w={'95%'}>

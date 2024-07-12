@@ -10,11 +10,18 @@ export interface ProductImagesDTO {
   productId?: string
 }
 
+type PaymentMethods = {
+  key: string
+  name: string
+}[]
+
 export interface ProductDTO {
   id?: string
   userId?: string
   user?: {
     avatar: string
+    name: string
+    phone: string
   }
 
   images: ProductImagesProps
@@ -26,7 +33,7 @@ export interface ProductDTO {
 
   price: number
   acceptTrade: boolean
-  paymentMethods: string[]
+  paymentMethods: PaymentMethods
 }
 
 export interface IMarketspaceContextData {
@@ -36,8 +43,8 @@ export interface IMarketspaceContextData {
   publishProduct: (data: ProductDTO) => Promise<void>
   fetchProducts: () => Promise<ProductDTO[]>
   fetchOwnProducts: () => Promise<ProductDTO[]>
-  getProduct: () => Promise<void>
+  getProduct: (id: string) => Promise<ProductDTO>
   updateProduct: () => Promise<void>
-  toggleVisibility: () => Promise<void>
-  deleteProduct: () => Promise<void>
+  toggleVisibility: (id: string, visibility: boolean) => Promise<void>
+  deleteProduct: (product: ProductDTO) => Promise<void>
 }

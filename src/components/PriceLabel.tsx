@@ -2,6 +2,7 @@ import { HStack, Text } from '@gluestack-ui/themed'
 import { ComponentProps } from 'react'
 
 import { FontSize } from '@/@types/font'
+import { formatPrice } from '@/utils/PriceFormat'
 
 interface PriceLabelProps extends ComponentProps<typeof HStack> {
   size?: FontSize
@@ -19,7 +20,7 @@ export const PriceLabel = ({
         R$
       </Text>
       <Text color={'$bluelight'} fontFamily={'$heading'} fontSize={size}>
-        {price}
+        {formatPrice(price / 100)}
       </Text>
     </HStack>
   )

@@ -6,6 +6,7 @@ import { TouchableOpacity } from 'react-native'
 import { ProductDTO } from '@/dtos/MarketspaceDTO'
 import { api } from '@/lib/axios'
 import { AppNavigationRoutesProp } from '@/routes/app.routes'
+import { formatPrice } from '@/utils/PriceFormat'
 
 import { Avatar } from './Avatar'
 import { Tag } from './Tag'
@@ -23,9 +24,9 @@ export const AdvertisingCard = ({
   const { navigate } = useNavigation<AppNavigationRoutesProp>()
   const handleGoToProductDetails = () => {
     if (isSelfAdvert) {
-      navigate('my-advert-details', { id: '1' })
+      navigate('my-advert-details', { id: data.id! })
     } else {
-      navigate('others-advert-details', { id: '1' })
+      navigate('others-advert-details', { id: data.id! })
     }
   }
 
@@ -110,10 +111,7 @@ export const AdvertisingCard = ({
             </Text>
 
             <Text $base-color="$gray100" fontSize={'$md'} fontFamily="$heading">
-              {new Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-              }).format(data.price / 100)}
+              {formatPrice(data.price / 100)}
             </Text>
           </HStack>
         </VStack>

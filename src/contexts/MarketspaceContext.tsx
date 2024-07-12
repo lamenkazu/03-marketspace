@@ -1,7 +1,7 @@
 import { createContext, PropsWithChildren, useState } from 'react'
 
 import { api } from '@/lib/axios'
-import { mapProductList } from '@/utils/MapProductData'
+import { mapProductData, mapProductList } from '@/utils/MapProductData'
 
 import { IMarketspaceContextData, ProductDTO } from '../dtos/MarketspaceDTO'
 
@@ -21,13 +21,17 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const publishProduct = async (data: ProductDTO) => {
+    const paymentMethods: string[] = data.paymentMethods.map(
+      (method) => method.key,
+    )
+
     const newProduct = {
       name: data.name,
       description: data.description,
       is_new: data.isNew,
       price: data.price * 100,
       accept_trade: data.acceptTrade,
-      payment_methods: data.paymentMethods,
+      payment_methods: paymentMethods,
     }
 
     const { data: result } = await api.post('/products', newProduct)
@@ -63,13 +67,28 @@ const MarketspaceContextProvider = ({ children }: PropsWithChildren) => {
     return mappedData
   }
 
-  const getProduct = async () => {}
+  const getProduct = async (id: string) => {
+    const { data } = await api.get(`/products/${id}`)
+
+    const mappedData = mapProductData(data)
+
+    return mappedData
+  }
 
   const updateProduct = async () => {}
 
-  const toggleVisibility = async () => {}
+  const toggleVisibility = async (id: string, visibility: boolean) => {
+    await api.patch(`/products/${id}`, { is_active: visibility })
+  }
 
-  const deleteProduct = async () => {}
+  const deleteProduct = async (product: ProductDTO) => {
+    await api.delete(`/products/${product.id}`)
+
+    const images: string[] = product.images.map((image) => image.name)
+    await api.delete('/products/images', {
+      data: { images },
+    })
+  }
 
   const value: IMarketspaceContextData = {
     newProduct,
